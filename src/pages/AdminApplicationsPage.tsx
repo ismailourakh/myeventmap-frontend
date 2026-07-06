@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { organizerApi } from "../api/organizer";
 import type { OrganizerApplication } from "../types";
+import { getErrorMessage } from "../lib/httpError";
 
 export function AdminApplicationsPage() {
   const [applications, setApplications] = useState<OrganizerApplication[]>([]);
@@ -13,23 +14,25 @@ export function AdminApplicationsPage() {
     try {
       const { data } = await organizerApi.listApplications("PENDING");
       setApplications(data.applications);
-    } catch (err: any) {
-      setError(err?.response?.data?.message || "Failed to load applications");
+    } catch (err: unknown) {
+      setError(getErrorMessage(err, "Failed to load applications"));
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    loadApplications();
+    void (async () => {
+      await loadApplications();
+    })();
   }, []);
 
   const approve = async (id: string) => {
     try {
       await organizerApi.approve(id);
       setApplications((prev) => prev.filter((app) => app.id !== id));
-    } catch (err: any) {
-      alert(err?.response?.data?.message || "Approve failed");
+    } catch (err: unknown) {
+      alert(getErrorMessage(err, "Approve failed"));
     }
   };
 
@@ -37,8 +40,8 @@ export function AdminApplicationsPage() {
     try {
       await organizerApi.reject(id);
       setApplications((prev) => prev.filter((app) => app.id !== id));
-    } catch (err: any) {
-      alert(err?.response?.data?.message || "Reject failed");
+    } catch (err: unknown) {
+      alert(getErrorMessage(err, "Reject failed"));
     }
   };
 

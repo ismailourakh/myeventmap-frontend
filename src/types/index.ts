@@ -37,7 +37,7 @@ export interface Event {
   description?: string | null;
   location?: string | null;
   postcode?: string | null;
-  mapUrl?: string | null; // <-- add this
+  mapUrl?: string | null;
   includesFood: boolean;
   startDate: string;
   endDate: string;
@@ -59,6 +59,8 @@ export interface Booking {
     id: string;
     title: string;
     location?: string | null;
+    postcode?: string | null;
+    mapUrl?: string | null;
     startDate: string;
     endDate: string;
     status: EventStatus;
@@ -66,4 +68,10 @@ export interface Booking {
     availableSeats: number;
   };
   user?: Pick<User, "id" | "name" | "email">;
+}
+
+export interface EventAttendee {
+  id: string; // booking id
+  createdAt: string;
+  user: Pick<User, "id" | "name" | "email">;
 }

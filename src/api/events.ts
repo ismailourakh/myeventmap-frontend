@@ -1,5 +1,5 @@
 import { api } from "./client";
-import type { Booking, Event } from "../types";
+import type { Booking, Event, EventAttendee } from "../types";
 
 export const eventsApi = {
   listPublished: (params?: { from?: string; to?: string; q?: string }) =>
@@ -22,5 +22,6 @@ export const eventsApi = {
 
   myBookings: () => api.get<{ bookings: Booking[] }>("/me/bookings"),
 
-  getAttendees: (id: string) => api.get<{ attendees: any[] }>(`/events/${id}/attendees`),
+  getAttendees: (id: string) =>
+    api.get<{ attendees: EventAttendee[] }>(`/events/${id}/attendees`),
 };
