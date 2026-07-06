@@ -2,8 +2,8 @@ import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { eventsApi } from "../api/events";
 import { MapPicker } from "../components/MapPicker";
-
-type EventStatus = "DRAFT" | "PUBLISHED" | "CANCELLED";
+import type { Event, EventStatus } from "../types";
+import { getErrorMessage } from "../lib/httpError";
 
 export function EditEventPage() {
   const { id } = useParams();
@@ -11,7 +11,6 @@ export function EditEventPage() {
 
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const [imageUrl, setImageUrl] = useState("");
   const [location, setLocation] = useState("");
   const [postcode, setPostcode] = useState("");
   const [mapUrl, setMapUrl] = useState("");
@@ -28,14 +27,13 @@ export function EditEventPage() {
   useEffect(() => {
     if (!id) return;
 
-    (async () => {
+    void (async () => {
       try {
         const { data } = await eventsApi.getMineById(id);
-        const e = data.event as any;
+        const e: Event = data.event;
 
         setTitle(e.title);
         setDescription(e.description || "");
-        setImageUrl(e.imageUrl || "");
         setLocation(e.location || "");
         setPostcode(e.postcode || "");
         setMapUrl(e.mapUrl || "");
@@ -44,8 +42,8 @@ export function EditEventPage() {
         setEndDate(new Date(e.endDate).toISOString().slice(0, 16));
         setCapacity(e.capacity);
         setStatus(e.status);
-      } catch (err: any) {
-        setError(err?.response?.data?.message || "Failed to load event");
+      } catch (err: unknown) {
+        setError(getErrorMessage(err, "Failed to load event"));
       } finally {
         setLoading(false);
       }
@@ -74,8 +72,8 @@ export function EditEventPage() {
       });
 
       navigate("/events/mine");
-    } catch (err: any) {
-      setError(err?.response?.data?.message || "Failed to update event");
+    } catch (err: unknown) {
+      setError(getErrorMessage(err, "Failed to update event"));
     } finally {
       setSaving(false);
     }
@@ -90,35 +88,9 @@ export function EditEventPage() {
       <form onSubmit={handleSubmit} style={{ display: "grid", gap: 12 }}>
         <input value={title} onChange={(e) => setTitle(e.target.value)} required />
 
-        <textarea
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-          rows={4}
-        />
+        <textarea value={description} onChange={(e) => setDescription(e.target.value)} rows={4} />
 
-        <input
-          type="url"
-          placeholder="Image URL (https://...)"
-          value={imageUrl}
-          onChange={(e) => setImageUrl(e.target.value)}
-        />
-
-        {imageUrl && (
-          <img
-            src={imageUrl}
-            alt="Event preview"
-            style={{ width: "100%", maxHeight: 260, objectFit: "cover", borderRadius: 8 }}
-            onError={(e) => {
-              (e.currentTarget as HTMLImageElement).style.display = "none";
-            }}
-          />
-        )}
-
-        <input
-          placeholder="Address / Venue name"
-          value={location}
-          onChange={(e) => setLocation(e.target.value)}
-        />
+        <input placeholder="Address / Venue name" value={location} onChange={(e) => setLocation(e.target.value)} />
 
         <input
           placeholder="UK Postcode (e.g. SW1A 1AA)"
@@ -127,13 +99,14 @@ export function EditEventPage() {
         />
 
         <MapPicker
-  postcode={postcode}
-  onPick={({ mapUrl: selectedMapUrl, postcode: pickedPostcode }) => {
-    setMapUrl(selectedMapUrl);
-    if (pickedPostcode) setPostcode(pickedPostcode);
-  }}
-  onPostcodeChange={(pc) => setPostcode(pc)}
-/>
+          postcode={postcode}
+          onPick={({ mapUrl: selectedMapUrl, postcode: pickedPostcode }) => {
+            setMapUrl(selectedMapUrl);
+            if (pickedPostcode) setPostcode(pickedPostcode);
+          }}
+          onPostcodeChange={setPostcode}
+        />
+
         <label style={{ display: "flex", alignItems: "center", gap: 8 }}>
           <input
             type="checkbox"
@@ -144,29 +117,13 @@ export function EditEventPage() {
         </label>
 
         <label>Start date</label>
-        <input
-          type="datetime-local"
-          value={startDate}
-          onChange={(e) => setStartDate(e.target.value)}
-          required
-        />
+        <input type="datetime-local" value={startDate} onChange={(e) => setStartDate(e.target.value)} required />
 
         <label>End date</label>
-        <input
-          type="datetime-local"
-          value={endDate}
-          onChange={(e) => setEndDate(e.target.value)}
-          required
-        />
+        <input type="datetime-local" value={endDate} onChange={(e) => setEndDate(e.target.value)} required />
 
         <label>Capacity</label>
-        <input
-          type="number"
-          min={1}
-          value={capacity}
-          onChange={(e) => setCapacity(Number(e.target.value))}
-          required
-        />
+        <input type="number" min={1} value={capacity} onChange={(e) => setCapacity(Number(e.target.value))} required />
 
         <label>Status</label>
         <select value={status} onChange={(e) => setStatus(e.target.value as EventStatus)}>

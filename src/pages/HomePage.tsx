@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { eventsApi } from "../api/events";
 import { useAuthStore } from "../store/authStore";
 import type { Event } from "../types";
+import { getErrorMessage } from "../lib/httpError";
 
 export function HomePage() {
   const [events, setEvents] = useState<Event[]>([]);
@@ -16,7 +17,7 @@ export function HomePage() {
   };
 
   useEffect(() => {
-    (async () => {
+    void (async () => {
       try {
         await loadEvents();
       } finally {
@@ -31,8 +32,8 @@ export function HomePage() {
       await eventsApi.book(id);
       alert("Booking successful!");
       await loadEvents();
-    } catch (err: any) {
-      alert(err?.response?.data?.message || "Booking failed");
+    } catch (err: unknown) {
+      alert(getErrorMessage(err, "Booking failed"));
     } finally {
       setBookingId(null);
     }
@@ -48,27 +49,21 @@ export function HomePage() {
         <p>No events available.</p>
       ) : (
         <div style={{ display: "grid", gap: 12 }}>
-          {events.map((event: any) => {
+          {events.map((event) => {
             const seatsLeft = event.seatsLeft ?? event.availableSeats ?? 0;
             const full = seatsLeft <= 0;
 
             return (
               <div key={event.id} style={cardStyle}>
-                {event.imageUrl ? (
-                  <img
-                    src={event.imageUrl}
-                    alt={event.title}
-                    style={{ width: "100%", maxHeight: 250, objectFit: "cover", borderRadius: 8 }}
-                  />
-                ) : null}
-
                 <h3>{event.title}</h3>
                 <p>{event.description || "No description"}</p>
                 <p><b>Location:</b> {event.location || "-"}</p>
                 <p><b>Postcode:</b> {event.postcode || "-"}</p>
                 {event.mapUrl && (
                   <p>
-                    <a href={event.mapUrl} target="_blank" rel="noreferrer">Open exact map location</a>
+                    <a href={event.mapUrl} target="_blank" rel="noreferrer">
+                      Open exact map location
+                    </a>
                   </p>
                 )}
                 <p><b>Food included:</b> {event.includesFood ? "Yes" : "No"}</p>

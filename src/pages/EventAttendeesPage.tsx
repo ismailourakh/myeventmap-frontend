@@ -1,28 +1,30 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { api } from "../api/client";
+import type { Event, EventAttendee } from "../types";
+import { getErrorMessage } from "../lib/httpError";
 
 export function EventAttendeesPage() {
   const { id } = useParams();
-  const [attendees, setAttendees] = useState<any[]>([]);
-  const [event, setEvent] = useState<any>(null);
+  const [attendees, setAttendees] = useState<EventAttendee[]>([]);
+  const [event, setEvent] = useState<Event | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
   useEffect(() => {
     if (!id) return;
 
-    (async () => {
+    void (async () => {
       try {
         const [eventRes, attendeesRes] = await Promise.all([
-          api.get(`/events/mine/${id}`),
-          api.get(`/events/${id}/attendees`),
+          api.get<{ event: Event }>(`/events/mine/${id}`),
+          api.get<{ attendees: EventAttendee[] }>(`/events/${id}/attendees`),
         ]);
 
         setEvent(eventRes.data.event);
         setAttendees(attendeesRes.data.attendees);
-      } catch (err: any) {
-        setError(err?.response?.data?.message || "Failed to load attendees");
+      } catch (err: unknown) {
+        setError(getErrorMessage(err, "Failed to load attendees"));
       } finally {
         setLoading(false);
       }

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { organizerApi } from "../api/organizer";
+import { getErrorMessage } from "../lib/httpError";
 
 export function ApplyOrganizerPage() {
   const [message, setMessage] = useState("");
@@ -13,8 +14,8 @@ export function ApplyOrganizerPage() {
       await organizerApi.apply({ message });
       setStatus("Application submitted successfully.");
       setMessage("");
-    } catch (err: any) {
-      setStatus(err?.response?.data?.message || "Failed to submit application");
+    } catch (err: unknown) {
+      setStatus(getErrorMessage(err, "Failed to submit application"));
     }
   };
 

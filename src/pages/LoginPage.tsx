@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { authApi } from "../api/auth";
 import { useAuthStore } from "../store/authStore";
+import { getErrorMessage } from "../lib/httpError";
 
 export function LoginPage() {
   const [email, setEmail] = useState("");
@@ -21,8 +22,8 @@ export function LoginPage() {
       const { data } = await authApi.login({ email, password });
       setAuth(data.user, data.token);
       navigate("/");
-    } catch (err: any) {
-      setError(err?.response?.data?.message || "Login failed");
+    } catch (err: unknown) {
+      setError(getErrorMessage(err, "Login failed"));
     } finally {
       setLoading(false);
     }

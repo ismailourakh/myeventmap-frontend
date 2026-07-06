@@ -1,18 +1,20 @@
 import { useEffect, useState } from "react";
 import { eventsApi } from "../api/events";
+import type { Booking } from "../types";
+import { getErrorMessage } from "../lib/httpError";
 
 export function MyBookingsPage() {
-  const [bookings, setBookings] = useState<any[]>([]);
+  const [bookings, setBookings] = useState<Booking[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
   useEffect(() => {
-    (async () => {
+    void (async () => {
       try {
         const { data } = await eventsApi.myBookings();
         setBookings(data.bookings);
-      } catch (err: any) {
-        setError(err?.response?.data?.message || "Failed to load bookings");
+      } catch (err: unknown) {
+        setError(getErrorMessage(err, "Failed to load bookings"));
       } finally {
         setLoading(false);
       }
@@ -32,9 +34,20 @@ export function MyBookingsPage() {
         <div style={{ display: "grid", gap: 12 }}>
           {bookings.map((booking) => (
             <div key={booking.id} style={cardStyle}>
-              <h3>{booking.event?.title}</h3>
+              <h3>{booking.event?.title ?? "-"}</h3>
               <p><b>Location:</b> {booking.event?.location || "-"}</p>
-              <p><b>Date:</b> {booking.event?.startDate ? new Date(booking.event.startDate).toLocaleString() : "-"}</p>
+              <p><b>Postcode:</b> {booking.event?.postcode || "-"}</p>
+              {booking.event?.mapUrl && (
+                <p>
+                  <a href={booking.event.mapUrl} target="_blank" rel="noreferrer">
+                    Open exact map location
+                  </a>
+                </p>
+              )}
+              <p>
+                <b>Date:</b>{" "}
+                {booking.event?.startDate ? new Date(booking.event.startDate).toLocaleString() : "-"}
+              </p>
               <p><b>Booked at:</b> {new Date(booking.createdAt).toLocaleString()}</p>
             </div>
           ))}

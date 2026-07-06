@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { authApi } from "../api/auth";
 import { useAuthStore } from "../store/authStore";
+import { getErrorMessage } from "../lib/httpError";
 
 export function RegisterPage() {
   const [name, setName] = useState("");
@@ -22,8 +23,8 @@ export function RegisterPage() {
       const { data } = await authApi.register({ name, email, password });
       setAuth(data.user, data.token);
       navigate("/");
-    } catch (err: any) {
-      setError(err?.response?.data?.message || "Register failed");
+    } catch (err: unknown) {
+      setError(getErrorMessage(err, "Register failed"));
     } finally {
       setLoading(false);
     }
