@@ -2,8 +2,8 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { eventsApi } from "../api/events";
 import { MapPicker } from "../components/MapPicker";
-
-type EventStatus = "DRAFT" | "PUBLISHED" | "CANCELLED";
+import type { EventStatus } from "../types";
+import { getErrorMessage } from "../lib/httpError";
 
 export function CreateEventPage() {
   const navigate = useNavigate();
@@ -53,8 +53,8 @@ export function CreateEventPage() {
       });
 
       navigate("/events/mine");
-    } catch (err: any) {
-      setError(err?.response?.data?.message || "Failed to create event");
+    } catch (err: unknown) {
+      setError(getErrorMessage(err, "Failed to create event"));
     } finally {
       setLoading(false);
     }
@@ -65,12 +65,7 @@ export function CreateEventPage() {
       <h1>Create Event</h1>
 
       <form onSubmit={handleSubmit} style={{ display: "grid", gap: 12 }}>
-        <input
-          placeholder="Title"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-          required
-        />
+        <input placeholder="Title" value={title} onChange={(e) => setTitle(e.target.value)} required />
 
         <textarea
           placeholder="Description"
@@ -79,11 +74,7 @@ export function CreateEventPage() {
           rows={4}
         />
 
-        <input
-          placeholder="Address / Venue name"
-          value={location}
-          onChange={(e) => setLocation(e.target.value)}
-        />
+        <input placeholder="Address / Venue name" value={location} onChange={(e) => setLocation(e.target.value)} />
 
         <input
           placeholder="UK Postcode (e.g. SW1A 1AA)"
@@ -101,44 +92,21 @@ export function CreateEventPage() {
         />
 
         <label style={{ display: "flex", alignItems: "center", gap: 8 }}>
-          <input
-            type="checkbox"
-            checked={includesFood}
-            onChange={(e) => setIncludesFood(e.target.checked)}
-          />
+          <input type="checkbox" checked={includesFood} onChange={(e) => setIncludesFood(e.target.checked)} />
           Food included
         </label>
 
         <label>Start date</label>
-        <input
-          type="datetime-local"
-          value={startDate}
-          onChange={(e) => setStartDate(e.target.value)}
-          required
-        />
+        <input type="datetime-local" value={startDate} onChange={(e) => setStartDate(e.target.value)} required />
 
         <label>End date</label>
-        <input
-          type="datetime-local"
-          value={endDate}
-          onChange={(e) => setEndDate(e.target.value)}
-          required
-        />
+        <input type="datetime-local" value={endDate} onChange={(e) => setEndDate(e.target.value)} required />
 
         <label>Capacity</label>
-        <input
-          type="number"
-          min={1}
-          value={capacity}
-          onChange={(e) => setCapacity(Number(e.target.value))}
-          required
-        />
+        <input type="number" min={1} value={capacity} onChange={(e) => setCapacity(Number(e.target.value))} required />
 
         <label>Status</label>
-        <select
-          value={status}
-          onChange={(e) => setStatus(e.target.value as EventStatus)}
-        >
+        <select value={status} onChange={(e) => setStatus(e.target.value as EventStatus)}>
           <option value="DRAFT">DRAFT</option>
           <option value="PUBLISHED">PUBLISHED</option>
           <option value="CANCELLED">CANCELLED</option>
