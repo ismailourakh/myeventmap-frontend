@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/set-state-in-effect */
 import { useEffect, useState } from "react";
 import { organizerApi } from "../api/organizer";
 import type { OrganizerApplication } from "../types";

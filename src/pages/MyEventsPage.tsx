@@ -9,22 +9,34 @@ export function MyEventsPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
-  const loadEvents = async () => {
-    setError("");
-    setLoading(true);
-
-    try {
-      const { data } = await eventsApi.listMine();
-      setEvents(data.events);
-    } catch (err) {
-      setError(getErrorMessage(err, "Failed to load your events"));
-    } finally {
-      setLoading(false);
-    }
-  };
-
   useEffect(() => {
+    let cancelled = false;
+
+    const loadEvents = async () => {
+      try {
+        const { data } = await eventsApi.listMine();
+
+        if (!cancelled) {
+          setEvents(data.events);
+        }
+      } catch (err) {
+        if (!cancelled) {
+          setError(
+            getErrorMessage(err, "Failed to load your events")
+          );
+        }
+      } finally {
+        if (!cancelled) {
+          setLoading(false);
+        }
+      }
+    };
+
     void loadEvents();
+
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   const handleDelete = async (id: string) => {
@@ -33,7 +45,9 @@ export function MyEventsPage() {
     try {
       await eventsApi.remove(id);
 
-      setEvents((prev) => prev.filter((event) => event.id !== id));
+      setEvents((prev) =>
+        prev.filter((event) => event.id !== id)
+      );
     } catch (err) {
       alert(getErrorMessage(err, "Delete failed"));
     }
