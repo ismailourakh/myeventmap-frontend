@@ -5,37 +5,105 @@ export function DashboardPage() {
   const user = useAuthStore((s) => s.user);
 
   return (
-    <div>
-      <h1>Dashboard</h1>
-      <p>Welcome, {user?.name}</p>
-      <p>Role: {user?.role}</p>
+    <div className="min-h-screen bg-[#F8F4EE]">
+      <div className="mx-auto max-w-7xl px-6 py-12">
 
-      <div style={{ display: "grid", gap: 10, marginTop: 20 }}>
-        <Link to="/apply-organizer">Apply to Become Organizer</Link>
+        {/* Header */}
+
+        <div className="rounded-3xl bg-gradient-to-r from-[#A67C52] via-[#B98B5F] to-[#E2C8A7] p-10 text-white shadow-xl">
+
+          <p className="text-lg opacity-90">
+            Welcome back 👋
+          </p>
+
+          <h1 className="mt-2 text-5xl font-black">
+            {user?.name}
+          </h1>
+
+          <div className="mt-6 inline-flex rounded-full bg-white/20 px-5 py-2 text-lg font-semibold backdrop-blur">
+            {user?.role}
+          </div>
+
+        </div>
+        {/* Quick Actions */}
+
+        <div className="mt-12">
+
+          <h2 className="mb-6 text-3xl font-bold text-[#3E3025]">
+            Quick Actions
+          </h2>
+
+          <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+
+            {/* Apply */}
+
+            {user?.role !== "ORGANIZER" && (<Link
+              to="/apply-organizer"
+              className="group rounded-3xl bg-white p-8 shadow-lg transition duration-300 hover:-translate-y-2 hover:shadow-2xl"
+            >
+              <div className="text-5xl">🚀</div>
+
+              <h3 className="mt-5 text-2xl font-bold text-[#3E3025]">
+                Become an Organizer
+              </h3>
+
+              <p className="mt-3 text-[#7A6757]">
+                Apply to create and manage your own events.
+              </p>
+
+            </Link>)}
+
+            {/* Organizer */}
+
+            {user?.role === "ORGANIZER" && (
+
+              <Link
+                to="/events/mine"
+                className="group rounded-3xl bg-white p-8 shadow-lg transition duration-300 hover:-translate-y-2 hover:shadow-2xl"
+              >
+
+                <div className="text-5xl">📅</div>
+
+                <h3 className="mt-5 text-2xl font-bold text-[#3E3025]">
+                  My Events
+                </h3>
+
+                <p className="mt-3 text-[#7A6757]">
+                  View, edit, and manage all your events.
+                </p>
+
+              </Link>
+
+            )}
+
+            {/* Admin */}
+
+            {user?.role === "ADMIN" && (
+
+              <Link
+                to="/admin/applications"
+                className="group rounded-3xl bg-white p-8 shadow-lg transition duration-300 hover:-translate-y-2 hover:shadow-2xl"
+              >
+
+                <div className="text-5xl">🛡️</div>
+
+                <h3 className="mt-5 text-2xl font-bold text-[#3E3025]">
+                  Organizer Applications
+                </h3>
+
+                <p className="mt-3 text-[#7A6757]">
+                  Review and approve organizer requests.
+                </p>
+
+              </Link>
+
+            )}
+
+          </div>
+
+        </div>
+
       </div>
-
-      {user?.role === "ORGANIZER" && (
-        <div style={{ marginTop: 20 }}>
-          <p>You can now build event management pages here.</p>
-        </div>
-      )}
-
-      {user?.role === "ADMIN" && (
-        <div style={{ marginTop: 20 }}>
-          <p>You can now build the admin applications dashboard here.</p>
-        </div>
-      )}
-      {user?.role === "ORGANIZER" && (
-          <div style={{ marginTop: 20 }}>
-            <Link to="/events/mine">My Events</Link>
-          </div>
-        )}
-
-        {user?.role === "ADMIN" && (
-          <div style={{ marginTop: 20 }}>
-            <Link to="/admin/applications">Review Organizer Applications</Link>
-          </div>
-        )}
-        </div>
+    </div>
   );
 }

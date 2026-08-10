@@ -79,65 +79,200 @@ export function EditEventPage() {
     }
   };
 
-  if (loading) return <p>Loading event...</p>;
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-[#F8F4EE]">
+        <div className="text-center">
+          <div className="mx-auto h-14 w-14 animate-spin rounded-full border-4 border-[#D8B58A] border-t-[#8C5A2B]" />
+          <p className="mt-5 text-lg font-semibold text-[#6B4E35]">
+            Loading event...
+          </p>
+        </div>
+      </div>
+    );
+  }
 
   return (
-    <div style={{ maxWidth: 800, margin: "0 auto" }}>
-      <h1>Edit Event</h1>
+    <div className="min-h-screen bg-[#F8F4EE]">
+      <div className="mx-auto max-w-4xl px-6 py-12">
+        {/* Hero */}
+        <div className="rounded-3xl bg-gradient-to-r from-[#A67C52] via-[#B98B5F] to-[#E2C8A7] p-10 text-white shadow-xl">
+          <h1 className="text-5xl font-black">Edit Event</h1>
+        </div>
 
-      <form onSubmit={handleSubmit} style={{ display: "grid", gap: 12 }}>
-        <input value={title} onChange={(e) => setTitle(e.target.value)} required />
+        {/* Form */}
+        <form
+          onSubmit={handleSubmit}
+          className="mt-8 rounded-3xl bg-white p-8 shadow-xl space-y-6"
+        >
+          {/* Title */}
+          <div>
+            <label className="mb-2 block font-semibold text-[#6B4E35]">
+              Title
+            </label>
 
-        <textarea value={description} onChange={(e) => setDescription(e.target.value)} rows={4} />
+            <input
+              className="w-full rounded-xl border border-[#DCC6AE] px-4 py-3 outline-none transition focus:border-[#A67C52] focus:ring-2 focus:ring-[#E8D5C0]"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              required
+            />
+          </div>
 
-        <input placeholder="Address / Venue name" value={location} onChange={(e) => setLocation(e.target.value)} />
+          {/* Description */}
+          <div>
+            <label className="mb-2 block font-semibold text-[#6B4E35]">
+              Description
+            </label>
 
-        <input
-          placeholder="UK Postcode (e.g. SW1A 1AA)"
-          value={postcode}
-          onChange={(e) => setPostcode(e.target.value)}
-        />
+            <textarea
+              rows={4}
+              className="w-full rounded-xl border border-[#DCC6AE] px-4 py-3 outline-none transition focus:border-[#A67C52] focus:ring-2 focus:ring-[#E8D5C0]"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+            />
+          </div>
 
-        <MapPicker
-          postcode={postcode}
-          onPick={({ mapUrl: selectedMapUrl, postcode: pickedPostcode }) => {
-            setMapUrl(selectedMapUrl);
-            if (pickedPostcode) setPostcode(pickedPostcode);
-          }}
-          onPostcodeChange={setPostcode}
-        />
+          {/* Location */}
+          <div>
+            <label className="mb-2 block font-semibold text-[#6B4E35]">
+              Location
+            </label>
 
-        <label style={{ display: "flex", alignItems: "center", gap: 8 }}>
-          <input
-            type="checkbox"
-            checked={includesFood}
-            onChange={(e) => setIncludesFood(e.target.checked)}
-          />
-          Food included
-        </label>
+            <input
+              placeholder="Address / Venue name"
+              className="w-full rounded-xl border border-[#DCC6AE] px-4 py-3 outline-none transition focus:border-[#A67C52] focus:ring-2 focus:ring-[#E8D5C0]"
+              value={location}
+              onChange={(e) => setLocation(e.target.value)}
+            />
+          </div>
 
-        <label>Start date</label>
-        <input type="datetime-local" value={startDate} onChange={(e) => setStartDate(e.target.value)} required />
+          {/* Postcode */}
+          <div>
+            <label className="mb-2 block font-semibold text-[#6B4E35]">
+              UK Postcode
+            </label>
 
-        <label>End date</label>
-        <input type="datetime-local" value={endDate} onChange={(e) => setEndDate(e.target.value)} required />
+            <input
+              placeholder="e.g. SW1A 1AA"
+              className="w-full rounded-xl border border-[#DCC6AE] px-4 py-3 outline-none transition focus:border-[#A67C52] focus:ring-2 focus:ring-[#E8D5C0]"
+              value={postcode}
+              onChange={(e) => setPostcode(e.target.value)}
+            />
+          </div>
 
-        <label>Capacity</label>
-        <input type="number" min={1} value={capacity} onChange={(e) => setCapacity(Number(e.target.value))} required />
+          {/* Map Picker */}
+          <div>
+            <label className="mb-2 block font-semibold text-[#6B4E35]">
+              Pick Location
+            </label>
 
-        <label>Status</label>
-        <select value={status} onChange={(e) => setStatus(e.target.value as EventStatus)}>
-          <option value="DRAFT">DRAFT</option>
-          <option value="PUBLISHED">PUBLISHED</option>
-          <option value="CANCELLED">CANCELLED</option>
-        </select>
+            <MapPicker
+              postcode={postcode}
+              onPick={({ mapUrl: selectedMapUrl, postcode: pickedPostcode }) => {
+                setMapUrl(selectedMapUrl);
+                if (pickedPostcode) setPostcode(pickedPostcode);
+              }}
+              onPostcodeChange={setPostcode}
+            />
+          </div>
 
-        {error && <p style={{ color: "red" }}>{error}</p>}
+          {/* Food */}
+          <label className="flex items-center gap-3 rounded-xl bg-[#F8F4EE] p-4">
+            <input
+              type="checkbox"
+              checked={includesFood}
+              onChange={(e) => setIncludesFood(e.target.checked)}
+              className="h-5 w-5 accent-[#A67C52]"
+            />
 
-        <button disabled={saving || !mapUrl}>
-          {saving ? "Saving..." : "Save Changes"}
-        </button>
-      </form>
+            <span className="font-medium text-[#6B4E35]">
+              Food included
+            </span>
+          </label>
+
+          {/* Dates */}
+          <div className="grid gap-6 md:grid-cols-2">
+            <div>
+              <label className="mb-2 block font-semibold text-[#6B4E35]">
+                Start Date
+              </label>
+
+              <input
+                type="datetime-local"
+                className="w-full rounded-xl border border-[#DCC6AE] px-4 py-3 outline-none transition focus:border-[#A67C52] focus:ring-2 focus:ring-[#E8D5C0]"
+                value={startDate}
+                onChange={(e) => setStartDate(e.target.value)}
+                required
+              />
+            </div>
+
+            <div>
+              <label className="mb-2 block font-semibold text-[#6B4E35]">
+                End Date
+              </label>
+
+              <input
+                type="datetime-local"
+                className="w-full rounded-xl border border-[#DCC6AE] px-4 py-3 outline-none transition focus:border-[#A67C52] focus:ring-2 focus:ring-[#E8D5C0]"
+                value={endDate}
+                onChange={(e) => setEndDate(e.target.value)}
+                required
+              />
+            </div>
+          </div>
+
+          {/* Capacity & Status */}
+          <div className="grid gap-6 md:grid-cols-2">
+            <div>
+              <label className="mb-2 block font-semibold text-[#6B4E35]">
+                Capacity
+              </label>
+
+              <input
+                type="number"
+                min={1}
+                className="w-full rounded-xl border border-[#DCC6AE] px-4 py-3 outline-none transition focus:border-[#A67C52] focus:ring-2 focus:ring-[#E8D5C0]"
+                value={capacity}
+                onChange={(e) => setCapacity(Number(e.target.value))}
+                required
+              />
+            </div>
+
+            <div>
+              <label className="mb-2 block font-semibold text-[#6B4E35]">
+                Status
+              </label>
+
+              <select
+                className="w-full rounded-xl border border-[#DCC6AE] px-4 py-3 outline-none transition focus:border-[#A67C52] focus:ring-2 focus:ring-[#E8D5C0]"
+                value={status}
+                onChange={(e) => setStatus(e.target.value as EventStatus)}
+              >
+                <option value="DRAFT">DRAFT</option>
+                <option value="PUBLISHED">PUBLISHED</option>
+                <option value="CANCELLED">CANCELLED</option>
+              </select>
+            </div>
+          </div>
+
+          {/* Error */}
+          {error && (
+            <div className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-red-600">
+              {error}
+            </div>
+          )}
+
+          {/* Submit */}
+          <button
+            type="submit"
+            disabled={saving || !mapUrl}
+            className="w-full rounded-xl bg-gradient-to-r from-[#A67C52] to-[#8C5A2B] px-6 py-4 text-lg font-bold text-white shadow-lg transition hover:scale-[1.02] hover:shadow-xl disabled:cursor-not-allowed disabled:opacity-50"
+          >
+            {saving ? "Saving..." : "Save Changes"}
+          </button>
+        </form>
+      </div>
     </div>
   );
 }
