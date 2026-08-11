@@ -61,7 +61,6 @@ function App() {
 
             MyEventMap
           </Link>
-
           {/* Navigation */}
 
           <nav className="flex items-center gap-2">
