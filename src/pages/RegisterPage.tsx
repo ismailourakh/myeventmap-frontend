@@ -29,7 +29,7 @@ export function RegisterPage() {
 
       setAuth(data.user, data.token);
 
-      navigate("/");
+      navigate("/login");
     } catch (err) {
       setError(getErrorMessage(err, "Register failed"));
     } finally {
