@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { useAuthStore } from "../store/authStore";
-import "../styles/styles.css";
+import "../styles/callsheet.css";
 
 interface QuickAction {
   id: string;
@@ -8,7 +8,8 @@ interface QuickAction {
   title: string;
   description: string;
   link: string;
-  roles: string[];
+  goLabel: string;
+  roles: Array<"USER" | "ORGANIZER" | "ADMIN">;
 }
 
 const QUICK_ACTIONS: QuickAction[] = [
@@ -18,6 +19,7 @@ const QUICK_ACTIONS: QuickAction[] = [
     title: "Become an Organizer",
     description: "Apply to create and manage your own events.",
     link: "/apply-organizer",
+    goLabel: "Start application",
     roles: ["USER"],
   },
   {
@@ -26,6 +28,7 @@ const QUICK_ACTIONS: QuickAction[] = [
     title: "My Events",
     description: "View, edit, and manage all your events.",
     link: "/events/mine",
+    goLabel: "Open events",
     roles: ["ORGANIZER"],
   },
   {
@@ -34,80 +37,87 @@ const QUICK_ACTIONS: QuickAction[] = [
     title: "Organizer Applications",
     description: "Review and approve organizer requests.",
     link: "/admin/applications",
+    goLabel: "Review queue",
     roles: ["ADMIN"],
   },
 ];
 
 export function DashboardPage() {
   const user = useAuthStore((s) => s.user);
+  const role = (user?.role ?? "USER") as "USER" | "ORGANIZER" | "ADMIN";
 
-  const filteredActions = QUICK_ACTIONS.filter((action) => {
-    if (user?.role === "ORGANIZER") {
-      return action.roles.includes("ORGANIZER");
-    }
-    if (user?.role === "ADMIN") {
-      return action.roles.includes("ADMIN");
-    }
-    return action.roles.includes("USER");
-  });
+  const actions = QUICK_ACTIONS.filter((action) => action.roles.includes(role));
 
   return (
-    <div className="min-h-screen bg-[#F8F4EE]">
-      <div className="mx-auto max-w-7xl px-6 py-12">
-        {/* Header */}
-        <DashboardHeader userName={user?.name} userRole={user?.role} />
+    <div className="callsheet-page">
+      <div className="callsheet-container">
+        <CallSheetHeader userName={user?.name} userRole={role} />
 
-        {/* Quick Actions */}
-        <QuickActionsSection actions={filteredActions} />
+        <section className="callsheet-section">
+          <div className="callsheet-section-head">
+            <h2 className="callsheet-section-title">Quick Actions</h2>
+            <div className="callsheet-section-rule" />
+          </div>
+
+          <div className="cue-grid">
+            {actions.map((action, i) => (
+              <CueCard key={action.id} action={action} index={i} />
+            ))}
+          </div>
+        </section>
       </div>
     </div>
   );
 }
 
-interface DashboardHeaderProps {
+function CallSheetHeader({
+  userName,
+  userRole,
+}: {
   userName?: string;
-  userRole?: string;
-}
-
-function DashboardHeader({ userName, userRole }: DashboardHeaderProps) {
+  userRole: string;
+}) {
   return (
-    <header className="dashboard-header text-white">
-      <div className="dashboard-header-content">
-        <p className="dashboard-header-greeting">Welcome back 👋</p>
-        <h1 className="dashboard-header-title">{userName}</h1>
-        <div className="dashboard-header-badge">{userRole}</div>
+    <header className="callsheet-header">
+      <div className="callsheet-header-stripe" />
+      <div className="callsheet-header-body">
+        <div>
+          <p className="callsheet-eyebrow">Tonight&rsquo;s Call</p>
+          <h1 className="callsheet-title">{userName ?? "Guest"}</h1>
+        </div>
+        <div className="callsheet-role-badge">
+          <span className="callsheet-role-dot" />
+          {userRole}
+        </div>
       </div>
     </header>
   );
 }
 
-interface QuickActionsSectionProps {
-  actions: QuickAction[];
-}
+function CueCard({ action, index }: { action: QuickAction; index: number }) {
+  const cueNumber = String(index + 1).padStart(2, "0");
 
-function QuickActionsSection({ actions }: QuickActionsSectionProps) {
   return (
-    <section className="quick-actions-section">
-      <h2 className="section-title">Quick Actions</h2>
-      <div className="action-grid">
-        {actions.map((action) => (
-          <ActionCard key={action.id} action={action} />
-        ))}
+    <Link
+      to={action.link}
+      className="cue-card"
+      style={{ ["--card-delay" as string]: `${index * 80}ms` }}
+    >
+      <div className="cue-card-meta">
+        <span className="cue-card-number">{cueNumber}</span>
+        <span className="cue-card-status">
+          <span className="cue-card-status-dot" />
+          Ready
+        </span>
       </div>
-    </section>
-  );
-}
 
-interface ActionCardProps {
-  action: QuickAction;
-}
+      <div className="cue-card-icon">{action.icon}</div>
+      <h3 className="cue-card-title">{action.title}</h3>
+      <p className="cue-card-desc">{action.description}</p>
 
-function ActionCard({ action }: ActionCardProps) {
-  return (
-    <Link to={action.link} className="action-card">
-      <div className="action-card-icon">{action.icon}</div>
-      <h3 className="action-card-title">{action.title}</h3>
-      <p className="action-card-description">{action.description}</p>
+      <div className="cue-card-perf" />
+
+      <span className="cue-card-go">{action.goLabel} →</span>
     </Link>
   );
 }
