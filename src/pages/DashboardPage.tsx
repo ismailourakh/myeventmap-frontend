@@ -1,109 +1,113 @@
 import { Link } from "react-router-dom";
 import { useAuthStore } from "../store/authStore";
+import "../styles/styles.css";
+
+interface QuickAction {
+  id: string;
+  icon: string;
+  title: string;
+  description: string;
+  link: string;
+  roles: string[];
+}
+
+const QUICK_ACTIONS: QuickAction[] = [
+  {
+    id: "become-organizer",
+    icon: "🚀",
+    title: "Become an Organizer",
+    description: "Apply to create and manage your own events.",
+    link: "/apply-organizer",
+    roles: ["USER"],
+  },
+  {
+    id: "my-events",
+    icon: "📅",
+    title: "My Events",
+    description: "View, edit, and manage all your events.",
+    link: "/events/mine",
+    roles: ["ORGANIZER"],
+  },
+  {
+    id: "admin-applications",
+    icon: "🛡️",
+    title: "Organizer Applications",
+    description: "Review and approve organizer requests.",
+    link: "/admin/applications",
+    roles: ["ADMIN"],
+  },
+];
 
 export function DashboardPage() {
   const user = useAuthStore((s) => s.user);
 
+  const filteredActions = QUICK_ACTIONS.filter((action) => {
+    if (user?.role === "ORGANIZER") {
+      return action.roles.includes("ORGANIZER");
+    }
+    if (user?.role === "ADMIN") {
+      return action.roles.includes("ADMIN");
+    }
+    return action.roles.includes("USER");
+  });
+
   return (
     <div className="min-h-screen bg-[#F8F4EE]">
       <div className="mx-auto max-w-7xl px-6 py-12">
-
         {/* Header */}
+        <DashboardHeader userName={user?.name} userRole={user?.role} />
 
-        <div className="rounded-3xl bg-gradient-to-r from-[#A67C52] via-[#B98B5F] to-[#E2C8A7] p-10 text-white shadow-xl">
-
-          <p className="text-lg opacity-90">
-            Welcome back 👋
-          </p>
-
-          <h1 className="mt-2 text-5xl font-black">
-            {user?.name}
-          </h1>
-
-          <div className="mt-6 inline-flex rounded-full bg-white/20 px-5 py-2 text-lg font-semibold backdrop-blur">
-            {user?.role}
-          </div>
-
-        </div>
         {/* Quick Actions */}
-
-        <div className="mt-12">
-
-          <h2 className="mb-6 text-3xl font-bold text-[#3E3025]">
-            Quick Actions
-          </h2>
-
-          <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
-
-            {/* Apply */}
-
-            {user?.role !== "ORGANIZER" && (<Link
-              to="/apply-organizer"
-              className="group rounded-3xl bg-white p-8 shadow-lg transition duration-300 hover:-translate-y-2 hover:shadow-2xl"
-            >
-              <div className="text-5xl">🚀</div>
-
-              <h3 className="mt-5 text-2xl font-bold text-[#3E3025]">
-                Become an Organizer
-              </h3>
-
-              <p className="mt-3 text-[#7A6757]">
-                Apply to create and manage your own events.
-              </p>
-
-            </Link>)}
-
-            {/* Organizer */}
-
-            {user?.role === "ORGANIZER" && (
-
-              <Link
-                to="/events/mine"
-                className="group rounded-3xl bg-white p-8 shadow-lg transition duration-300 hover:-translate-y-2 hover:shadow-2xl"
-              >
-
-                <div className="text-5xl">📅</div>
-
-                <h3 className="mt-5 text-2xl font-bold text-[#3E3025]">
-                  My Events
-                </h3>
-
-                <p className="mt-3 text-[#7A6757]">
-                  View, edit, and manage all your events.
-                </p>
-
-              </Link>
-
-            )}
-
-            {/* Admin */}
-
-            {user?.role === "ADMIN" && (
-
-              <Link
-                to="/admin/applications"
-                className="group rounded-3xl bg-white p-8 shadow-lg transition duration-300 hover:-translate-y-2 hover:shadow-2xl"
-              >
-
-                <div className="text-5xl">🛡️</div>
-
-                <h3 className="mt-5 text-2xl font-bold text-[#3E3025]">
-                  Organizer Applications
-                </h3>
-
-                <p className="mt-3 text-[#7A6757]">
-                  Review and approve organizer requests.
-                </p>
-
-              </Link>
-
-            )}
-
-          </div>
-
-        </div>
-
+        <QuickActionsSection actions={filteredActions} />
       </div>
     </div>
+  );
+}
+
+interface DashboardHeaderProps {
+  userName?: string;
+  userRole?: string;
+}
+
+function DashboardHeader({ userName, userRole }: DashboardHeaderProps) {
+  return (
+    <header className="dashboard-header text-white">
+      <div className="dashboard-header-content">
+        <p className="dashboard-header-greeting">Welcome back 👋</p>
+        <h1 className="dashboard-header-title">{userName}</h1>
+        <div className="dashboard-header-badge">{userRole}</div>
+      </div>
+    </header>
+  );
+}
+
+interface QuickActionsSectionProps {
+  actions: QuickAction[];
+}
+
+function QuickActionsSection({ actions }: QuickActionsSectionProps) {
+  return (
+    <section className="quick-actions-section">
+      <h2 className="section-title">Quick Actions</h2>
+      <div className="action-grid">
+        {actions.map((action) => (
+          <ActionCard key={action.id} action={action} />
+        ))}
+      </div>
+    </section>
+  );
+}
+
+interface ActionCardProps {
+  action: QuickAction;
+}
+
+function ActionCard({ action }: ActionCardProps) {
+  return (
+    <Link to={action.link} className="action-card">
+      <div className="action-card-icon">{action.icon}</div>
+      <h3 className="action-card-title">{action.title}</h3>
+      <p className="action-card-description">{action.description}</p>
+    </Link>
   );
 }

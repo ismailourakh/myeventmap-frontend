@@ -1,0 +1,488 @@
+/* ============================================
+   DESIGN SYSTEM: "Call Sheet" — shared tokens
+   (duplicated from callsheet.css so this file
+   works standalone; keep values in sync)
+   ============================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@500;600&display=swap');
+
+:root {
+  --ink-950: #14181C;
+  --ink-900: #1B2027;
+  --ink-850: #212831;
+  --ink-800: #262E38;
+  --line: #333C46;
+  --line-bright: #4A5560;
+
+  --paper: #F3ECDD;
+  --paper-dim: #C7C0B2;
+  --muted: #8B93A0;
+
+  --signal: #FF5A36;
+  --signal-dim: #C23F22;
+  --signal-glow: rgba(255, 90, 54, 0.35);
+
+  --go: #6EE7A8;
+  --go-dim: rgba(110, 231, 168, 0.15);
+  --standby: #F2C84B;
+  --standby-dim: rgba(242, 200, 75, 0.15);
+  --sold: #E4574B;
+  --sold-dim: rgba(228, 87, 75, 0.15);
+
+  --font-display: 'Oswald', 'Arial Narrow', sans-serif;
+  --font-body: 'Inter', -apple-system, sans-serif;
+  --font-mono: 'IBM Plex Mono', 'SF Mono', monospace;
+
+  --ease: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+.callsheet-page {
+  min-height: 100vh;
+  background: var(--ink-950);
+  font-family: var(--font-body);
+  color: var(--paper);
+}
+
+.callsheet-container {
+  max-width: 80rem;
+  margin: 0 auto;
+  padding: 0 1.5rem 5rem;
+}
+
+/* ============================================
+   MARQUEE HERO
+   ============================================ */
+
+.marquee-hero {
+  position: relative;
+  overflow: hidden;
+  padding: 5rem 1.5rem 4.5rem;
+  background:
+    radial-gradient(ellipse 1000px 500px at 50% -20%, rgba(255, 90, 54, 0.14), transparent 70%),
+    var(--ink-900);
+  border-bottom: 1px solid var(--line);
+  text-align: center;
+}
+
+.marquee-bulbs {
+  display: flex;
+  justify-content: center;
+  gap: 0.65rem;
+  margin-bottom: 1.75rem;
+}
+
+.marquee-bulb {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--standby);
+  box-shadow: 0 0 6px var(--standby-dim);
+  animation: bulb-flicker 3.2s ease-in-out infinite;
+  animation-delay: calc(var(--bulb-i) * 140ms);
+}
+
+@keyframes bulb-flicker {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.25; }
+}
+
+.marquee-eyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.marquee-title {
+  font-family: var(--font-display);
+  font-size: clamp(2.5rem, 6vw, 4.25rem);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.01em;
+  color: var(--paper);
+  margin-top: 0.75rem;
+  line-height: 1.05;
+}
+
+.marquee-sub {
+  max-width: 34rem;
+  margin: 1.25rem auto 0;
+  font-size: 1.05rem;
+  line-height: 1.6;
+  color: var(--paper-dim);
+}
+
+/* ============================================
+   TICKET GRID
+   ============================================ */
+
+.ticket-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 2rem;
+  margin-top: 3.5rem;
+}
+
+/* ============================================
+   TICKET CARD — die-cut stub look
+   ============================================ */
+
+.ticket-card {
+  position: relative;
+  background: var(--ink-900);
+  border: 1px solid var(--line);
+  border-radius: 0.5rem;
+  overflow: hidden;
+  transition: border-color 260ms var(--ease), transform 260ms var(--ease);
+}
+
+.ticket-card:hover {
+  border-color: var(--line-bright);
+  transform: translateY(-4px);
+}
+
+.ticket-banner {
+  position: relative;
+  height: 8rem;
+  background: repeating-linear-gradient(
+    135deg,
+    var(--ink-850),
+    var(--ink-850) 14px,
+    var(--ink-800) 14px,
+    var(--ink-800) 28px
+  );
+  display: flex;
+  align-items: flex-end;
+  padding: 1rem 1.25rem;
+}
+
+.ticket-class {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-950);
+  background: var(--standby);
+  border-radius: 3px;
+  padding: 0.3rem 0.6rem;
+}
+
+/* sold-out ink stamp */
+.ticket-stamp {
+  position: absolute;
+  top: 1.75rem;
+  right: -1.5rem;
+  transform: rotate(10deg);
+  border: 3px solid var(--sold);
+  color: var(--sold);
+  font-family: var(--font-mono);
+  font-weight: 600;
+  font-size: 0.85rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  padding: 0.35rem 1.75rem;
+  border-radius: 4px;
+  opacity: 0.9;
+  mix-blend-mode: normal;
+}
+
+/* perforation — the tear line between banner and body */
+.ticket-tear {
+  height: 0;
+  border-top: 2px dashed var(--line);
+  position: relative;
+}
+
+.ticket-tear::before,
+.ticket-tear::after {
+  content: '';
+  position: absolute;
+  top: -8px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--ink-950);
+}
+
+.ticket-tear::before { left: -8px; }
+.ticket-tear::after { right: -8px; }
+
+.ticket-body {
+  padding: 1.5rem 1.75rem 1.75rem;
+}
+
+.ticket-title {
+  font-family: var(--font-display);
+  font-size: 1.4rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.01em;
+  color: var(--paper);
+}
+
+.ticket-desc {
+  margin-top: 0.6rem;
+  font-size: 0.9rem;
+  line-height: 1.55;
+  color: var(--paper-dim);
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.ticket-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 1.25rem;
+}
+
+.ticket-chip {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  color: var(--muted);
+  background: var(--ink-850);
+  border: 1px solid var(--line);
+  border-radius: 3px;
+  padding: 0.35rem 0.6rem;
+}
+
+/* availability gauge — VU-meter style */
+.gauge {
+  margin-top: 1.5rem;
+}
+
+.gauge-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.gauge-count {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--paper);
+}
+
+.gauge-count.is-low { color: var(--sold); }
+.gauge-count.is-mid { color: var(--standby); }
+.gauge-count.is-open { color: var(--go); }
+
+.gauge-track {
+  margin-top: 0.5rem;
+  height: 6px;
+  border-radius: 3px;
+  background: var(--ink-850);
+  overflow: hidden;
+  display: flex;
+  gap: 2px;
+}
+
+.gauge-fill {
+  height: 100%;
+  border-radius: 3px;
+  transition: width 600ms var(--ease);
+}
+
+.gauge-fill.is-low { background: var(--sold); }
+.gauge-fill.is-mid { background: var(--standby); }
+.gauge-fill.is-open { background: var(--go); }
+
+.ticket-map-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-top: 1.1rem;
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--muted);
+  text-decoration: none;
+  transition: color 200ms var(--ease);
+}
+
+.ticket-map-link:hover {
+  color: var(--signal);
+}
+
+/* ============================================
+   ACTION ROW
+   ============================================ */
+
+.ticket-action {
+  margin-top: 1.5rem;
+}
+
+.btn-reserve {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-950);
+  background: var(--signal);
+  border: none;
+  border-radius: 0.375rem;
+  padding: 0.9rem 1rem;
+  cursor: pointer;
+  transition: background 200ms var(--ease), transform 150ms var(--ease);
+}
+
+.btn-reserve:hover:not(:disabled) {
+  background: #FF7452;
+}
+
+.btn-reserve:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+.btn-reserve:disabled {
+  cursor: not-allowed;
+  background: var(--ink-850);
+  color: var(--muted);
+}
+
+.btn-reserve:focus-visible {
+  outline: 2px solid var(--signal);
+  outline-offset: 3px;
+}
+
+.btn-login-notice {
+  width: 100%;
+  text-align: center;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  background: var(--ink-850);
+  border: 1px dashed var(--line-bright);
+  border-radius: 0.375rem;
+  padding: 0.9rem 1rem;
+}
+
+/* ============================================
+   EMPTY STATE — "house is dark"
+   ============================================ */
+
+.empty-house {
+  margin-top: 3.5rem;
+  text-align: center;
+  padding: 5rem 2rem;
+  background: var(--ink-900);
+  border: 1px dashed var(--line-bright);
+  border-radius: 0.5rem;
+}
+
+.empty-house-icon {
+  font-size: 3rem;
+  opacity: 0.6;
+}
+
+.empty-house-title {
+  font-family: var(--font-display);
+  font-size: 1.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: var(--paper);
+  margin-top: 1.25rem;
+}
+
+.empty-house-sub {
+  margin-top: 0.6rem;
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+
+/* ============================================
+   LOADING STATE — "standby"
+   ============================================ */
+
+.standby-screen {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--ink-950);
+}
+
+.standby-content {
+  text-align: center;
+}
+
+.standby-ring {
+  width: 3rem;
+  height: 3rem;
+  margin: 0 auto;
+  border-radius: 50%;
+  border: 3px solid var(--ink-850);
+  border-top-color: var(--signal);
+  animation: spin 800ms linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.standby-text {
+  margin-top: 1.25rem;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.standby-text::after {
+  content: '';
+  display: inline-block;
+  width: 1ch;
+  animation: ellipsis 1.4s steps(4) infinite;
+}
+
+@keyframes ellipsis {
+  0% { content: ''; }
+  25% { content: '.'; }
+  50% { content: '..'; }
+  75% { content: '...'; }
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+
+@media (max-width: 640px) {
+  .marquee-hero { padding: 3.5rem 1.25rem 3rem; }
+  .callsheet-container { padding: 0 1.25rem 3.5rem; }
+  .ticket-tear::before,
+  .ticket-tear::after { display: none; }
+  .ticket-stamp { right: -1rem; }
+}

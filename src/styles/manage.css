@@ -1,0 +1,642 @@
+/* ============================================
+   DESIGN SYSTEM: "Call Sheet" — shared tokens
+   (duplicated so this file works standalone)
+   ============================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@500;600&display=swap');
+
+:root {
+  --ink-950: #14181C;
+  --ink-900: #1B2027;
+  --ink-850: #212831;
+  --ink-800: #262E38;
+  --line: #333C46;
+  --line-bright: #4A5560;
+
+  --paper: #F3ECDD;
+  --paper-dim: #C7C0B2;
+  --muted: #8B93A0;
+
+  --signal: #FF5A36;
+  --signal-dim: #C23F22;
+  --signal-glow: rgba(255, 90, 54, 0.35);
+
+  --go: #6EE7A8;
+  --go-dim: rgba(110, 231, 168, 0.15);
+  --standby: #F2C84B;
+  --standby-dim: rgba(242, 200, 75, 0.15);
+  --sold: #E4574B;
+  --sold-dim: rgba(228, 87, 75, 0.12);
+
+  --font-display: 'Oswald', 'Arial Narrow', sans-serif;
+  --font-body: 'Inter', -apple-system, sans-serif;
+  --font-mono: 'IBM Plex Mono', 'SF Mono', monospace;
+
+  --ease: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ============================================
+   PAGE SHELL
+   ============================================ */
+
+.ops-page {
+  min-height: 100vh;
+  background: var(--ink-950);
+  font-family: var(--font-body);
+  color: var(--paper);
+}
+
+.ops-container {
+  max-width: 76rem;
+  margin: 0 auto;
+  padding: 3.5rem 1.5rem 5rem;
+}
+
+.ops-container--narrow {
+  max-width: 52rem;
+}
+
+.ops-eyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--signal);
+}
+
+.ops-title {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 4vw, 2.9rem);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.01em;
+  color: var(--paper);
+  margin-top: 0.4rem;
+}
+
+.ops-sub {
+  margin-top: 0.75rem;
+  max-width: 40rem;
+  color: var(--paper-dim);
+  line-height: 1.6;
+}
+
+/* ============================================
+   STANDBY (loading state)
+   ============================================ */
+
+.standby-screen {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--ink-950);
+}
+
+.standby-content {
+  text-align: center;
+}
+
+.standby-ring {
+  width: 3rem;
+  height: 3rem;
+  margin: 0 auto;
+  border-radius: 50%;
+  border: 3px solid var(--ink-850);
+  border-top-color: var(--signal);
+  animation: spin 800ms linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.standby-text {
+  margin-top: 1.25rem;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+/* ============================================
+   READOUT TILES (stat displays)
+   ============================================ */
+
+.readout-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.25rem;
+  margin-top: 2rem;
+}
+
+.readout-tile {
+  background: var(--ink-900);
+  border: 1px solid var(--line);
+  border-radius: 0.5rem;
+  padding: 1.5rem 1.6rem;
+}
+
+.readout-icon {
+  font-size: 1.7rem;
+}
+
+.readout-value {
+  font-family: var(--font-mono);
+  font-size: 2.1rem;
+  font-weight: 600;
+  color: var(--paper);
+  margin-top: 0.7rem;
+  line-height: 1;
+}
+
+.readout-label {
+  margin-top: 0.5rem;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+/* ============================================
+   STATUS PILL
+   ============================================ */
+
+.status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 0.4rem 0.8rem;
+  border-radius: 999px;
+  border: 1px solid transparent;
+}
+
+.status-pill-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+}
+
+.status-pill--pending {
+  color: var(--standby);
+  background: var(--standby-dim);
+  border-color: rgba(242, 200, 75, 0.3);
+}
+
+.status-pill--pending .status-pill-dot { background: var(--standby); }
+
+.status-pill--approved {
+  color: var(--go);
+  background: var(--go-dim);
+  border-color: rgba(110, 231, 168, 0.3);
+}
+
+.status-pill--approved .status-pill-dot { background: var(--go); }
+
+.status-pill--rejected {
+  color: var(--sold);
+  background: var(--sold-dim);
+  border-color: rgba(228, 87, 75, 0.3);
+}
+
+.status-pill--rejected .status-pill-dot { background: var(--sold); }
+
+/* ============================================
+   DOSSIER CARD (organizer application)
+   ============================================ */
+
+.dossier-grid {
+  margin-top: 2.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.dossier-card {
+  background: var(--ink-900);
+  border: 1px solid var(--line);
+  border-radius: 0.6rem;
+  padding: 2rem;
+  transition: border-color 220ms var(--ease);
+}
+
+.dossier-card:hover {
+  border-color: var(--line-bright);
+}
+
+.dossier-top {
+  display: flex;
+  gap: 1.5rem;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.dossier-identity {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.dossier-avatar {
+  flex-shrink: 0;
+  width: 3.25rem;
+  height: 3.25rem;
+  border-radius: 0.4rem;
+  background: var(--signal);
+  color: var(--ink-950);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 1.15rem;
+  transform: rotate(-4deg);
+}
+
+.dossier-name {
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: var(--paper);
+}
+
+.dossier-email {
+  margin-top: 0.15rem;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+
+.dossier-motivation {
+  margin-top: 1.5rem;
+}
+
+.dossier-motivation-label {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.dossier-motivation-text {
+  margin-top: 0.65rem;
+  padding: 1rem 1.25rem;
+  background: var(--ink-850);
+  border-left: 3px solid var(--signal);
+  border-radius: 0 0.3rem 0.3rem 0;
+  color: var(--paper-dim);
+  line-height: 1.65;
+  font-size: 0.92rem;
+  white-space: pre-wrap;
+}
+
+.dossier-side {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  min-width: 12rem;
+}
+
+.dossier-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.btn-approve {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-950);
+  background: var(--go);
+  border: none;
+  border-radius: 0.4rem;
+  padding: 0.8rem 1rem;
+  cursor: pointer;
+  transition: background 200ms var(--ease), transform 150ms var(--ease);
+}
+
+.btn-approve:hover:not(:disabled) { background: #85EFB6; }
+.btn-approve:active:not(:disabled) { transform: scale(0.98); }
+.btn-approve:disabled { cursor: not-allowed; background: var(--ink-850); color: var(--muted); }
+
+.btn-reject {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--sold);
+  background: transparent;
+  border: 1px solid var(--sold);
+  border-radius: 0.4rem;
+  padding: 0.75rem 1rem;
+  cursor: pointer;
+  transition: background 200ms var(--ease), color 200ms var(--ease);
+}
+
+.btn-reject:hover:not(:disabled) { background: var(--sold); color: var(--ink-950); }
+.btn-reject:disabled { cursor: not-allowed; opacity: 0.45; }
+
+/* ============================================
+   EMPTY BLOCK
+   ============================================ */
+
+.empty-block {
+  margin-top: 2.5rem;
+  text-align: center;
+  padding: 4.5rem 2rem;
+  background: var(--ink-900);
+  border: 1px dashed var(--line-bright);
+  border-radius: 0.6rem;
+}
+
+.empty-block-icon {
+  font-size: 3rem;
+  opacity: 0.7;
+}
+
+.empty-block-title {
+  font-family: var(--font-display);
+  font-size: 1.6rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: var(--paper);
+  margin-top: 1rem;
+}
+
+.empty-block-sub {
+  margin-top: 0.5rem;
+  color: var(--muted);
+  font-size: 0.92rem;
+}
+
+/* ============================================
+   FORM FIELDS (create / edit event)
+   ============================================ */
+
+.stage-form-card {
+  background: var(--ink-900);
+  border: 1px solid var(--line);
+  border-radius: 0.6rem;
+  padding: 2.25rem;
+  margin-top: 2rem;
+}
+
+.field-group {
+  display: flex;
+  flex-direction: column;
+  gap: 1.35rem;
+}
+
+.field-row-2 {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.35rem;
+}
+
+@media (min-width: 640px) {
+  .field-row-2 {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.field-label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.field-input,
+.field-textarea,
+.field-select {
+  width: 100%;
+  background: var(--ink-850);
+  border: 1px solid var(--line);
+  border-radius: 0.4rem;
+  padding: 0.85rem 1rem;
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  color: var(--paper);
+  outline: none;
+  transition: border-color 200ms var(--ease), box-shadow 200ms var(--ease);
+}
+
+.field-input::placeholder,
+.field-textarea::placeholder {
+  color: var(--muted);
+}
+
+.field-input:focus,
+.field-textarea:focus,
+.field-select:focus {
+  border-color: var(--signal);
+  box-shadow: 0 0 0 3px var(--signal-glow);
+}
+
+.field-textarea {
+  resize: none;
+  line-height: 1.6;
+}
+
+.field-select {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%238B93A0' d='M1 1l5 5 5-5'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 1rem center;
+  padding-right: 2.5rem;
+  cursor: pointer;
+}
+
+.field-checkbox-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: var(--ink-850);
+  border: 1px solid var(--line);
+  border-radius: 0.4rem;
+  padding: 1rem 1.1rem;
+}
+
+.field-checkbox {
+  width: 1.15rem;
+  height: 1.15rem;
+  accent-color: var(--signal);
+  cursor: pointer;
+}
+
+.field-checkbox-label {
+  font-size: 0.92rem;
+  color: var(--paper-dim);
+}
+
+.field-map-wrap {
+  border: 1px solid var(--line);
+  border-radius: 0.4rem;
+  overflow: hidden;
+  background: var(--ink-850);
+}
+
+/* --- Alerts --- */
+
+.alert {
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  line-height: 1.5;
+  border-radius: 0.4rem;
+  padding: 0.9rem 1rem;
+  border: 1px solid transparent;
+}
+
+.alert-error {
+  color: var(--sold);
+  background: var(--sold-dim);
+  border-color: rgba(228, 87, 75, 0.35);
+}
+
+.alert-success {
+  color: var(--go);
+  background: var(--go-dim);
+  border-color: rgba(110, 231, 168, 0.35);
+}
+
+/* --- Submit button --- */
+
+.btn-submit {
+  width: 100%;
+  margin-top: 2rem;
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-950);
+  background: var(--signal);
+  border: none;
+  border-radius: 0.4rem;
+  padding: 0.95rem 1rem;
+  cursor: pointer;
+  transition: background 200ms var(--ease), transform 150ms var(--ease);
+}
+
+.btn-submit:hover:not(:disabled) { background: #FF7452; }
+.btn-submit:active:not(:disabled) { transform: scale(0.98); }
+.btn-submit:disabled { cursor: not-allowed; background: var(--ink-850); color: var(--muted); }
+.btn-submit:focus-visible { outline: 2px solid var(--signal); outline-offset: 3px; }
+
+/* ============================================
+   MANIFEST TABLE (attendees)
+   ============================================ */
+
+.manifest-wrap {
+  margin-top: 2.5rem;
+  background: var(--ink-900);
+  border: 1px solid var(--line);
+  border-radius: 0.6rem;
+  overflow: hidden;
+}
+
+.manifest-scroll {
+  overflow-x: auto;
+}
+
+.manifest {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.manifest thead {
+  background: var(--ink-850);
+}
+
+.manifest th {
+  padding: 1rem 1.5rem;
+  text-align: left;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+  border-bottom: 1px solid var(--line);
+  white-space: nowrap;
+}
+
+.manifest td {
+  padding: 1.1rem 1.5rem;
+  border-top: 1px solid var(--line);
+  color: var(--paper-dim);
+  font-size: 0.9rem;
+}
+
+.manifest tbody tr {
+  transition: background 150ms var(--ease);
+}
+
+.manifest tbody tr:hover {
+  background: var(--ink-850);
+}
+
+.manifest-attendee {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+}
+
+.manifest-avatar {
+  flex-shrink: 0;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 0.35rem;
+  background: var(--signal);
+  color: var(--ink-950);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-weight: 600;
+}
+
+.manifest-name {
+  font-weight: 600;
+  color: var(--paper);
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+
+@media (max-width: 640px) {
+  .ops-container { padding: 2.5rem 1.25rem 3.5rem; }
+  .stage-form-card { padding: 1.5rem; }
+  .dossier-card { padding: 1.5rem; }
+  .dossier-side { min-width: 0; width: 100%; }
+}

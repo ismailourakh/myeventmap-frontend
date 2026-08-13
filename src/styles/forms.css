@@ -1,0 +1,515 @@
+/* ============================================
+   DESIGN SYSTEM: "Call Sheet" — shared tokens
+   (duplicated so this file works standalone;
+   keep values in sync with the other stylesheets)
+   ============================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@500;600&display=swap');
+
+:root {
+  --ink-950: #14181C;
+  --ink-900: #1B2027;
+  --ink-850: #212831;
+  --ink-800: #262E38;
+  --line: #333C46;
+  --line-bright: #4A5560;
+
+  --paper: #F3ECDD;
+  --paper-dim: #C7C0B2;
+  --muted: #8B93A0;
+
+  --signal: #FF5A36;
+  --signal-dim: #C23F22;
+  --signal-glow: rgba(255, 90, 54, 0.35);
+
+  --go: #6EE7A8;
+  --go-dim: rgba(110, 231, 168, 0.15);
+  --standby: #F2C84B;
+  --sold: #E4574B;
+  --sold-dim: rgba(228, 87, 75, 0.14);
+
+  --font-display: 'Oswald', 'Arial Narrow', sans-serif;
+  --font-body: 'Inter', -apple-system, sans-serif;
+  --font-mono: 'IBM Plex Mono', 'SF Mono', monospace;
+
+  --ease: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ============================================
+   SHARED FORM FIELDS
+   ============================================ */
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.form-label {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.form-input,
+.form-textarea {
+  width: 100%;
+  background: var(--ink-850);
+  border: 1px solid var(--line);
+  border-radius: 0.375rem;
+  padding: 0.9rem 1rem;
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  color: var(--paper);
+  outline: none;
+  transition: border-color 200ms var(--ease), box-shadow 200ms var(--ease);
+}
+
+.form-textarea {
+  resize: vertical;
+  line-height: 1.6;
+}
+
+.form-input::placeholder,
+.form-textarea::placeholder {
+  color: var(--muted);
+  opacity: 0.7;
+}
+
+.form-input:focus,
+.form-textarea:focus {
+  border-color: var(--signal);
+  box-shadow: 0 0 0 3px var(--signal-glow);
+}
+
+.form-banner {
+  font-size: 0.88rem;
+  border-radius: 0.375rem;
+  padding: 0.9rem 1.1rem;
+  border: 1px solid;
+  font-weight: 500;
+}
+
+.form-banner.is-error {
+  color: #FFB4A8;
+  background: var(--sold-dim);
+  border-color: rgba(228, 87, 75, 0.35);
+}
+
+.form-banner.is-success {
+  color: #A8F0C6;
+  background: var(--go-dim);
+  border-color: rgba(110, 231, 168, 0.35);
+}
+
+.btn-submit {
+  width: 100%;
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-950);
+  background: var(--signal);
+  border: none;
+  border-radius: 0.375rem;
+  padding: 1rem 1rem;
+  cursor: pointer;
+  transition: background 200ms var(--ease), transform 150ms var(--ease);
+}
+
+.btn-submit:hover:not(:disabled) {
+  background: #FF7452;
+}
+
+.btn-submit:active:not(:disabled) {
+  transform: scale(0.99);
+}
+
+.btn-submit:disabled {
+  cursor: not-allowed;
+  background: var(--ink-800);
+  color: var(--muted);
+}
+
+.btn-submit:focus-visible {
+  outline: 2px solid var(--signal);
+  outline-offset: 3px;
+}
+
+/* ============================================
+   AUTH SHELL — "the box office"
+   split screen: marquee panel + admission form
+   ============================================ */
+
+.auth-shell {
+  min-height: 100vh;
+  display: grid;
+  background: var(--ink-950);
+  color: var(--paper);
+  font-family: var(--font-body);
+}
+
+@media (min-width: 1024px) {
+  .auth-shell {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+/* --- Left: marquee panel --- */
+
+.auth-panel {
+  display: none;
+  position: relative;
+  flex-direction: column;
+  justify-content: center;
+  padding: 5rem;
+  overflow: hidden;
+  background:
+    radial-gradient(ellipse 700px 500px at 20% 0%, rgba(255, 90, 54, 0.16), transparent 65%),
+    linear-gradient(180deg, var(--ink-900) 0%, var(--ink-950) 100%);
+  border-right: 1px solid var(--line);
+}
+
+@media (min-width: 1024px) {
+  .auth-panel {
+    display: flex;
+  }
+}
+
+.auth-panel-bulbs {
+  display: flex;
+  gap: 0.6rem;
+  margin-bottom: 2rem;
+}
+
+.auth-panel-bulb {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--standby);
+  box-shadow: 0 0 6px rgba(242, 200, 75, 0.4);
+  animation: bulb-flicker 3.2s ease-in-out infinite;
+  animation-delay: calc(var(--bulb-i) * 140ms);
+}
+
+@keyframes bulb-flicker {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.25; }
+}
+
+.auth-panel-eyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.auth-panel-title {
+  font-family: var(--font-display);
+  font-size: clamp(2.5rem, 4vw, 3.5rem);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.01em;
+  line-height: 1.05;
+  margin-top: 0.75rem;
+  max-width: 20ch;
+}
+
+.auth-panel-sub {
+  margin-top: 1.5rem;
+  font-size: 1.05rem;
+  line-height: 1.65;
+  color: var(--paper-dim);
+  max-width: 32ch;
+}
+
+/* checklist styled as a torn admission list */
+.auth-checklist {
+  margin-top: 3rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.auth-checklist-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 0;
+  border-bottom: 1px dashed var(--line-bright);
+}
+
+.auth-checklist-item:last-child {
+  border-bottom: none;
+}
+
+.auth-checklist-icon {
+  font-size: 1.35rem;
+  width: 2rem;
+  text-align: center;
+}
+
+.auth-checklist-text {
+  font-size: 0.98rem;
+  color: var(--paper);
+}
+
+/* --- Right: admission form --- */
+
+.auth-form-side {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2.5rem 1.5rem;
+}
+
+.auth-card {
+  width: 100%;
+  max-width: 26rem;
+  background: var(--ink-900);
+  border: 1px solid var(--line);
+  border-radius: 0.5rem;
+  padding: 2.5rem;
+}
+
+.auth-card-header {
+  text-align: center;
+}
+
+.auth-card-mark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 3.5rem;
+  height: 3.5rem;
+  border-radius: 0.5rem;
+  background: var(--signal);
+  color: var(--ink-950);
+  font-size: 1.5rem;
+  transform: rotate(-4deg);
+  margin-bottom: 1.25rem;
+}
+
+.auth-card-eyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.auth-card-title {
+  font-family: var(--font-display);
+  font-size: 2rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: var(--paper);
+  margin-top: 0.4rem;
+}
+
+.auth-card-sub {
+  margin-top: 0.6rem;
+  font-size: 0.9rem;
+  color: var(--paper-dim);
+}
+
+.auth-form {
+  margin-top: 2.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.4rem;
+}
+
+.auth-footer {
+  margin-top: 2rem;
+  text-align: center;
+  font-size: 0.9rem;
+  color: var(--paper-dim);
+}
+
+.auth-footer-link {
+  color: var(--signal);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.auth-footer-link:hover {
+  text-decoration: underline;
+}
+
+/* ============================================
+   CREW APPLICATION — "backstage pass"
+   ============================================ */
+
+.crew-page {
+  min-height: 100vh;
+  background: var(--ink-950);
+  color: var(--paper);
+  font-family: var(--font-body);
+}
+
+.crew-container {
+  max-width: 72rem;
+  margin: 0 auto;
+  padding: 4rem 1.5rem 5rem;
+}
+
+.crew-header {
+  max-width: 40rem;
+}
+
+.crew-eyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--signal);
+}
+
+.crew-title {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 4vw, 2.75rem);
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--paper);
+  margin-top: 0.5rem;
+  line-height: 1.1;
+}
+
+.crew-sub {
+  margin-top: 0.85rem;
+  color: var(--paper-dim);
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+.crew-grid {
+  margin-top: 3rem;
+  display: grid;
+  gap: 1.75rem;
+}
+
+@media (min-width: 1024px) {
+  .crew-grid {
+    grid-template-columns: 1fr 22rem;
+    align-items: start;
+  }
+}
+
+.crew-form-card {
+  background: var(--ink-900);
+  border: 1px solid var(--line);
+  border-radius: 0.5rem;
+  padding: 2.25rem;
+}
+
+.crew-form-label {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--paper);
+  margin-bottom: 0.75rem;
+  display: block;
+}
+
+.crew-form {
+  margin-top: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* sidebar note cards — pinned to the call board */
+.crew-side {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.crew-note {
+  position: relative;
+  background: var(--ink-900);
+  border: 1px dashed var(--line-bright);
+  border-radius: 0.375rem;
+  padding: 1.75rem 1.5rem 1.5rem;
+}
+
+.crew-note-pin {
+  position: absolute;
+  top: -6px;
+  left: 1.5rem;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--signal);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+}
+
+.crew-note-label {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.crew-note-title {
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: var(--paper);
+  margin-top: 0.5rem;
+}
+
+.crew-note-list {
+  margin-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  list-style: none;
+  padding: 0;
+}
+
+.crew-note-list li {
+  font-size: 0.9rem;
+  color: var(--paper-dim);
+  line-height: 1.5;
+  display: flex;
+  gap: 0.6rem;
+}
+
+.crew-note-body {
+  margin-top: 1rem;
+  font-size: 0.9rem;
+  color: var(--paper-dim);
+  line-height: 1.65;
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+
+@media (max-width: 640px) {
+  .auth-card { padding: 1.75rem; }
+  .crew-container { padding: 2.5rem 1.25rem 3.5rem; }
+  .crew-form-card { padding: 1.5rem; }
+}

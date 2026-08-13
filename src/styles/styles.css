@@ -1,0 +1,335 @@
+/* ============================================
+   DESIGN SYSTEM: "Call Sheet"
+   A stage-manager's console, not a SaaS gradient.
+   ============================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@500;600&display=swap');
+
+:root {
+  /* Ink scale — backstage darkness */
+  --ink-950: #14181C;
+  --ink-900: #1B2027;
+  --ink-850: #212831;
+  --ink-800: #262E38;
+  --line: #333C46;
+  --line-bright: #4A5560;
+
+  /* Paper — what the light hits */
+  --paper: #F3ECDD;
+  --paper-dim: #C7C0B2;
+  --muted: #8B93A0;
+
+  /* Signal — the cue light */
+  --signal: #FF5A36;
+  --signal-dim: #C23F22;
+  --signal-glow: rgba(255, 90, 54, 0.35);
+
+  /* Go / standby states */
+  --go: #6EE7A8;
+  --go-dim: rgba(110, 231, 168, 0.15);
+  --standby: #F2C84B;
+
+  /* Type */
+  --font-display: 'Oswald', 'Arial Narrow', sans-serif;
+  --font-body: 'Inter', -apple-system, sans-serif;
+  --font-mono: 'IBM Plex Mono', 'SF Mono', monospace;
+
+  --ease: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ============================================
+   PAGE SHELL
+   ============================================ */
+
+.callsheet-page {
+  min-height: 100vh;
+  background:
+    radial-gradient(ellipse 900px 500px at 15% -10%, rgba(255, 90, 54, 0.08), transparent),
+    var(--ink-950);
+  font-family: var(--font-body);
+  color: var(--paper);
+}
+
+.callsheet-container {
+  max-width: 76rem;
+  margin: 0 auto;
+  padding: 3.5rem 1.5rem 5rem;
+}
+
+/* ============================================
+   HEADER — "TONIGHT'S CALL"
+   ============================================ */
+
+.callsheet-header {
+  position: relative;
+  background: linear-gradient(180deg, var(--ink-900) 0%, var(--ink-850) 100%);
+  border: 1px solid var(--line);
+  border-radius: 0.25rem;
+  padding: 0;
+  overflow: hidden;
+}
+
+/* hazard stripe — thin, top edge, evokes stage tape */
+.callsheet-header-stripe {
+  height: 6px;
+  width: 100%;
+  background: repeating-linear-gradient(
+    -45deg,
+    var(--signal),
+    var(--signal) 10px,
+    var(--ink-900) 10px,
+    var(--ink-900) 20px
+  );
+}
+
+.callsheet-header-body {
+  padding: 2.5rem 2.5rem 2.75rem;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+
+.callsheet-eyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.callsheet-title {
+  font-family: var(--font-display);
+  font-size: clamp(2.25rem, 5vw, 3.5rem);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.01em;
+  color: var(--paper);
+  margin-top: 0.5rem;
+  line-height: 1.05;
+}
+
+.callsheet-role-badge {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--go);
+  background: var(--go-dim);
+  border: 1px solid rgba(110, 231, 168, 0.3);
+  border-radius: 999px;
+  padding: 0.5rem 1rem 0.5rem 0.75rem;
+  white-space: nowrap;
+}
+
+.callsheet-role-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--go);
+  box-shadow: 0 0 0 3px var(--go-dim);
+  animation: pulse-dot 2.2s var(--ease) infinite;
+}
+
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.55; transform: scale(0.85); }
+}
+
+/* ============================================
+   SECTION LABEL
+   ============================================ */
+
+.callsheet-section {
+  margin-top: 3.5rem;
+}
+
+.callsheet-section-head {
+  display: flex;
+  align-items: baseline;
+  gap: 0.9rem;
+  margin-bottom: 1.75rem;
+}
+
+.callsheet-section-title {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--paper);
+}
+
+.callsheet-section-rule {
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, var(--line-bright), transparent);
+}
+
+/* ============================================
+   CUE CARDS
+   ============================================ */
+
+.cue-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+  gap: 1.25rem;
+}
+
+.cue-card {
+  --card-delay: 0ms;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  background: var(--ink-900);
+  border: 1px solid var(--line);
+  border-radius: 0.375rem;
+  padding: 1.75rem 1.75rem 1.5rem;
+  text-decoration: none;
+  color: inherit;
+  transition: border-color 260ms var(--ease), transform 260ms var(--ease), background 260ms var(--ease);
+  animation: card-in 500ms var(--ease) both;
+  animation-delay: var(--card-delay);
+}
+
+@keyframes card-in {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.cue-card:hover,
+.cue-card:focus-visible {
+  border-color: var(--signal-dim);
+  background: var(--ink-850);
+  transform: translateY(-3px);
+}
+
+.cue-card:focus-visible {
+  outline: 2px solid var(--signal);
+  outline-offset: 3px;
+}
+
+/* top row: cue number + status light */
+.cue-card-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 1.25rem;
+}
+
+.cue-card-number::before {
+  content: 'CUE ';
+}
+
+.cue-card-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: var(--signal);
+}
+
+.cue-card-status-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--signal);
+  box-shadow: 0 0 8px var(--signal-glow);
+}
+
+.cue-card-icon {
+  font-size: 2.25rem;
+  line-height: 1;
+  filter: grayscale(0.15);
+}
+
+.cue-card-title {
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  color: var(--paper);
+  margin-top: 1.1rem;
+}
+
+.cue-card-desc {
+  font-size: 0.9rem;
+  line-height: 1.55;
+  color: var(--paper-dim);
+  margin-top: 0.6rem;
+  flex-grow: 1;
+}
+
+.cue-card-go {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-top: 1.4rem;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+  transition: color 200ms var(--ease), gap 200ms var(--ease);
+}
+
+.cue-card:hover .cue-card-go {
+  color: var(--signal);
+  gap: 0.6rem;
+}
+
+/* perforated ticket-stub edge at card bottom */
+.cue-card-perf {
+  margin-top: 1.5rem;
+  height: 1px;
+  background-image: radial-gradient(circle, var(--ink-950) 2px, transparent 2.2px);
+  background-size: 10px 1px;
+  background-repeat: repeat-x;
+  background-position: center;
+  position: relative;
+}
+
+.cue-card-perf::before,
+.cue-card-perf::after {
+  content: '';
+  position: absolute;
+  top: -6px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--ink-950);
+}
+
+.cue-card-perf::before { left: -1.75rem; }
+.cue-card-perf::after { right: -1.75rem; }
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+
+@media (max-width: 640px) {
+  .callsheet-container { padding: 2rem 1.25rem 3.5rem; }
+  .callsheet-header-body { padding: 2rem 1.5rem 2.25rem; flex-direction: column; }
+  .cue-card-perf::before,
+  .cue-card-perf::after { display: none; }
+}

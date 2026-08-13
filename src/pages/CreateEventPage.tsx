@@ -4,6 +4,7 @@ import { eventsApi } from "../api/events";
 import { MapPicker } from "../components/MapPicker";
 import type { EventStatus } from "../types";
 import { getErrorMessage } from "../lib/httpError";
+import "../styles/manage.css";
 
 export function CreateEventPage() {
   const navigate = useNavigate();
@@ -63,187 +64,145 @@ export function CreateEventPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#F8F4EE]">
-      <div className="mx-auto max-w-4xl px-6 py-12">
-        {/* Hero */}
-        <div className="rounded-3xl bg-gradient-to-r from-[#A67C52] via-[#B98B5F] to-[#E2C8A7] p-10 text-white shadow-xl">
-          <h1 className="text-5xl font-black">Create Event</h1>
-        </div>
+    <div className="ops-page">
+      <div className="ops-container ops-container--narrow">
+        <p className="ops-eyebrow">New Listing</p>
+        <h1 className="ops-title">Create Event</h1>
+        <p className="ops-sub">Fill out the details below to put a new event on the board.</p>
 
-        {/* Form */}
-        <form
-          onSubmit={handleSubmit}
-          className="mt-8 space-y-6 rounded-3xl bg-white p-8 shadow-xl"
-        >
-          {/* Title */}
-          <div>
-            <label className="mb-2 block font-semibold text-[#6B4E35]">
-              Title
-            </label>
-
-            <input
-              className="w-full rounded-xl border border-[#DCC6AE] px-4 py-3 outline-none transition focus:border-[#A67C52] focus:ring-2 focus:ring-[#E8D5C0]"
-              placeholder="Event title"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-              required
-            />
-          </div>
-
-          {/* Description */}
-          <div>
-            <label className="mb-2 block font-semibold text-[#6B4E35]">
-              Description
-            </label>
-
-            <textarea
-              rows={4}
-              placeholder="Describe your event..."
-              className="w-full rounded-xl border border-[#DCC6AE] px-4 py-3 outline-none transition focus:border-[#A67C52] focus:ring-2 focus:ring-[#E8D5C0]"
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-            />
-          </div>
-
-          {/* Location */}
-          <div>
-            <label className="mb-2 block font-semibold text-[#6B4E35]">
-              Location
-            </label>
-
-            <input
-              placeholder="Address / Venue name"
-              className="w-full rounded-xl border border-[#DCC6AE] px-4 py-3 outline-none transition focus:border-[#A67C52] focus:ring-2 focus:ring-[#E8D5C0]"
-              value={location}
-              onChange={(e) => setLocation(e.target.value)}
-            />
-          </div>
-
-          {/* Postcode */}
-          <div>
-            <label className="mb-2 block font-semibold text-[#6B4E35]">
-              UK Postcode
-            </label>
-
-            <input
-              placeholder="e.g. SW1A 1AA"
-              className="w-full rounded-xl border border-[#DCC6AE] px-4 py-3 outline-none transition focus:border-[#A67C52] focus:ring-2 focus:ring-[#E8D5C0]"
-              value={postcode}
-              onChange={(e) => setPostcode(e.target.value)}
-            />
-          </div>
-
-          {/* Map Picker */}
-          <div>
-            <label className="mb-2 block font-semibold text-[#6B4E35]">
-              Pick Location
-            </label>
-
-            <MapPicker
-              postcode={postcode}
-              onPick={({ mapUrl: selectedMapUrl, postcode: pickedPostcode }) => {
-                setMapUrl(selectedMapUrl);
-                if (pickedPostcode) setPostcode(pickedPostcode);
-              }}
-              onPostcodeChange={setPostcode}
-            />
-          </div>
-
-          {/* Food */}
-          <label className="flex items-center gap-3 rounded-xl bg-[#F8F4EE] p-4">
-            <input
-              type="checkbox"
-              checked={includesFood}
-              onChange={(e) => setIncludesFood(e.target.checked)}
-              className="h-5 w-5 accent-[#A67C52]"
-            />
-
-            <span className="font-medium text-[#6B4E35]">
-              Food included
-            </span>
-          </label>
-
-          {/* Dates */}
-          <div className="grid gap-6 md:grid-cols-2">
+        <form onSubmit={handleSubmit} className="stage-form-card">
+          <div className="field-group">
             <div>
-              <label className="mb-2 block font-semibold text-[#6B4E35]">
-                Start Date
-              </label>
-
+              <label className="field-label" htmlFor="ce-title">Title</label>
               <input
-                type="datetime-local"
-                className="w-full rounded-xl border border-[#DCC6AE] px-4 py-3 outline-none transition focus:border-[#A67C52] focus:ring-2 focus:ring-[#E8D5C0]"
-                value={startDate}
-                onChange={(e) => setStartDate(e.target.value)}
+                id="ce-title"
+                className="field-input"
+                placeholder="Event title"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
                 required
               />
             </div>
 
             <div>
-              <label className="mb-2 block font-semibold text-[#6B4E35]">
-                End Date
-              </label>
-
-              <input
-                type="datetime-local"
-                className="w-full rounded-xl border border-[#DCC6AE] px-4 py-3 outline-none transition focus:border-[#A67C52] focus:ring-2 focus:ring-[#E8D5C0]"
-                value={endDate}
-                onChange={(e) => setEndDate(e.target.value)}
-                required
-              />
-            </div>
-          </div>
-
-          {/* Capacity & Status */}
-          <div className="grid gap-6 md:grid-cols-2">
-            <div>
-              <label className="mb-2 block font-semibold text-[#6B4E35]">
-                Capacity
-              </label>
-
-              <input
-                type="number"
-                min={1}
-                className="w-full rounded-xl border border-[#DCC6AE] px-4 py-3 outline-none transition focus:border-[#A67C52] focus:ring-2 focus:ring-[#E8D5C0]"
-                value={capacity}
-                onChange={(e) => setCapacity(Number(e.target.value))}
-                required
+              <label className="field-label" htmlFor="ce-description">Description</label>
+              <textarea
+                id="ce-description"
+                rows={4}
+                placeholder="Describe your event…"
+                className="field-textarea"
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
               />
             </div>
 
             <div>
-              <label className="mb-2 block font-semibold text-[#6B4E35]">
-                Status
-              </label>
-
-              <select
-                className="w-full rounded-xl border border-[#DCC6AE] px-4 py-3 outline-none transition focus:border-[#A67C52] focus:ring-2 focus:ring-[#E8D5C0]"
-                value={status}
-                onChange={(e) =>
-                  setStatus(e.target.value as EventStatus)
-                }
-              >
-                <option value="DRAFT">DRAFT</option>
-                <option value="PUBLISHED">PUBLISHED</option>
-                <option value="CANCELLED">CANCELLED</option>
-              </select>
+              <label className="field-label" htmlFor="ce-location">Location</label>
+              <input
+                id="ce-location"
+                placeholder="Address / Venue name"
+                className="field-input"
+                value={location}
+                onChange={(e) => setLocation(e.target.value)}
+              />
             </div>
+
+            <div>
+              <label className="field-label" htmlFor="ce-postcode">UK Postcode</label>
+              <input
+                id="ce-postcode"
+                placeholder="e.g. SW1A 1AA"
+                className="field-input"
+                value={postcode}
+                onChange={(e) => setPostcode(e.target.value)}
+              />
+            </div>
+
+            <div>
+              <label className="field-label">Pick Location</label>
+              <div className="field-map-wrap">
+                <MapPicker
+                  postcode={postcode}
+                  onPick={({ mapUrl: selectedMapUrl, postcode: pickedPostcode }) => {
+                    setMapUrl(selectedMapUrl);
+                    if (pickedPostcode) setPostcode(pickedPostcode);
+                  }}
+                  onPostcodeChange={setPostcode}
+                />
+              </div>
+            </div>
+
+            <label className="field-checkbox-row" htmlFor="ce-food">
+              <input
+                id="ce-food"
+                type="checkbox"
+                checked={includesFood}
+                onChange={(e) => setIncludesFood(e.target.checked)}
+                className="field-checkbox"
+              />
+              <span className="field-checkbox-label">Food included</span>
+            </label>
+
+            <div className="field-row-2">
+              <div>
+                <label className="field-label" htmlFor="ce-start">Start Date</label>
+                <input
+                  id="ce-start"
+                  type="datetime-local"
+                  className="field-input"
+                  value={startDate}
+                  onChange={(e) => setStartDate(e.target.value)}
+                  required
+                />
+              </div>
+
+              <div>
+                <label className="field-label" htmlFor="ce-end">End Date</label>
+                <input
+                  id="ce-end"
+                  type="datetime-local"
+                  className="field-input"
+                  value={endDate}
+                  onChange={(e) => setEndDate(e.target.value)}
+                  required
+                />
+              </div>
+            </div>
+
+            <div className="field-row-2">
+              <div>
+                <label className="field-label" htmlFor="ce-capacity">Capacity</label>
+                <input
+                  id="ce-capacity"
+                  type="number"
+                  min={1}
+                  className="field-input"
+                  value={capacity}
+                  onChange={(e) => setCapacity(Number(e.target.value))}
+                  required
+                />
+              </div>
+
+              <div>
+                <label className="field-label" htmlFor="ce-status">Status</label>
+                <select
+                  id="ce-status"
+                  className="field-select"
+                  value={status}
+                  onChange={(e) => setStatus(e.target.value as EventStatus)}
+                >
+                  <option value="DRAFT">DRAFT</option>
+                  <option value="PUBLISHED">PUBLISHED</option>
+                  <option value="CANCELLED">CANCELLED</option>
+                </select>
+              </div>
+            </div>
+
+            {error && <div className="alert alert-error">{error}</div>}
           </div>
 
-          {/* Error */}
-          {error && (
-            <div className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-red-600">
-              {error}
-            </div>
-          )}
-
-          {/* Submit */}
-          <button
-            type="submit"
-            disabled={loading || !mapUrl}
-            className="w-full rounded-xl bg-gradient-to-r from-[#A67C52] to-[#8C5A2B] px-6 py-4 text-lg font-bold text-white shadow-lg transition hover:scale-[1.02] hover:shadow-xl disabled:cursor-not-allowed disabled:opacity-50"
-          >
-            {loading ? "Creating..." : "Create Event"}
+          <button type="submit" disabled={loading || !mapUrl} className="btn-submit">
+            {loading ? "Creating…" : "Create Event"}
           </button>
         </form>
       </div>

@@ -1,10 +1,12 @@
 import { useState } from "react";
 import { organizerApi } from "../api/organizer";
 import { getErrorMessage } from "../lib/httpError";
+import "../styles/forms.css";
 
 export function ApplyOrganizerPage() {
   const [message, setMessage] = useState("");
   const [status, setStatus] = useState("");
+  const [success, setSuccess] = useState(false);
   const [loading, setLoading] = useState(false);
 
   const submit = async (e: React.FormEvent) => {
@@ -15,153 +17,85 @@ export function ApplyOrganizerPage() {
 
     try {
       await organizerApi.apply({ message });
-
-      setStatus("🎉 Your application has been submitted successfully!");
+      setStatus("Application submitted — we'll be in touch shortly.");
+      setSuccess(true);
       setMessage("");
     } catch (err) {
       setStatus(getErrorMessage(err, "Failed to submit application"));
+      setSuccess(false);
     } finally {
       setLoading(false);
     }
   };
 
-  const success = status.startsWith("🎉");
-
   return (
-    <div className="min-h-screen bg-[#F8F4EE]">
-      <div className="mx-auto max-w-6xl px-6 py-14">
+    <div className="crew-page">
+      <div className="crew-container">
+        <div className="crew-header">
+          <p className="crew-eyebrow">Backstage Access</p>
+          <h1 className="crew-title">Apply for a Crew Pass</h1>
+          <p className="crew-sub">
+            Organizers run the show — creating events, managing the door, and
+            building the experience. Tell us why you want in.
+          </p>
+        </div>
 
-        {/* Content */}
-
-        <div className="mt-12 grid gap-10 lg:grid-cols-[1fr_420px]">
-
+        <div className="crew-grid">
           {/* Form */}
+          <div className="crew-form-card">
+            <label className="crew-form-label" htmlFor="message">
+              Why do you want to become an organizer?
+            </label>
 
-          <div className="rounded-3xl bg-white p-8 shadow-xl">
-
-            <h2 className="text-3xl font-bold text-[#3E3025]">
-              Organizer Application
-            </h2>
-
-            <form
-              onSubmit={submit}
-              className="mt-8 space-y-6"
-            >
-
-              <div>
-
-                <label className="mb-3 block text-lg font-semibold text-[#5A4332]">
-                  Why do you want to become an organizer?
-                </label>
-
-                <textarea
-                  rows={8}
-                  required
-                  value={message}
-                  onChange={(e) => setMessage(e.target.value)}
-                  placeholder="Describe your experience, your ideas, and the kinds of events you want to organize..."
-                  className="
-                    w-full
-                    resize-none
-                    rounded-2xl
-                    border
-                    border-[#D7C3AE]
-                    bg-[#FCFAF8]
-                    px-5
-                    py-4
-                    leading-7
-                    outline-none
-                    transition
-                    focus:border-[#A67C52]
-                    focus:ring-4
-                    focus:ring-[#EAD8C7]
-                  "
-                />
-
-              </div>
+            <form onSubmit={submit} className="crew-form">
+              <textarea
+                id="message"
+                rows={8}
+                required
+                value={message}
+                onChange={(e) => setMessage(e.target.value)}
+                placeholder="Describe your experience, your ideas, and the kinds of events you want to organize…"
+                className="form-textarea"
+              />
 
               {status && (
-                <div
-                  className={`rounded-2xl p-4 font-medium ${
-                    success
-                      ? "border border-green-200 bg-green-50 text-green-700"
-                      : "border border-red-200 bg-red-50 text-red-600"
-                  }`}
-                >
+                <div className={`form-banner ${success ? "is-success" : "is-error"}`}>
                   {status}
                 </div>
               )}
 
-              <button
-                type="submit"
-                disabled={loading}
-                className="
-                  w-full
-                  rounded-xl
-                  bg-gradient-to-r
-                  from-[#A67C52]
-                  to-[#8C5A2B]
-                  py-4
-                  text-lg
-                  font-bold
-                  text-white
-                  shadow-lg
-                  transition-all
-                  duration-300
-                  hover:scale-[1.02]
-                  hover:shadow-xl
-                  disabled:cursor-not-allowed
-                  disabled:opacity-60
-                "
-              >
-                {loading ? "Submitting..." : "Submit Application"}
+              <button type="submit" disabled={loading} className="btn-submit">
+                {loading ? "Submitting…" : "Submit application"}
               </button>
-
             </form>
-
           </div>
 
           {/* Sidebar */}
-
-          <div className="space-y-6">
-
-            <div className="rounded-3xl bg-white p-7 shadow-lg">
-
-              <div className="text-4xl">⭐</div>
-
-              <h3 className="mt-4 text-2xl font-bold text-[#3E3025]">
-                Why Become an Organizer?
-              </h3>
-
-              <ul className="mt-5 space-y-4 text-[#6D5A4B]">
+          <div className="crew-side">
+            <div className="crew-note">
+              <span className="crew-note-pin" />
+              <p className="crew-note-label">Note 01</p>
+              <h3 className="crew-note-title">Why Join the Crew?</h3>
+              <ul className="crew-note-list">
                 <li>🎟 Create and manage your own events.</li>
                 <li>📈 Reach more attendees.</li>
                 <li>🤝 Build your community.</li>
                 <li>🌍 Promote experiences across your city.</li>
               </ul>
-
             </div>
 
-            <div className="rounded-3xl bg-white p-7 shadow-lg">
-
-              <div className="text-4xl">📝</div>
-
-              <h3 className="mt-4 text-2xl font-bold text-[#3E3025]">
-                Review Process
-              </h3>
-
-              <p className="mt-4 leading-8 text-[#6D5A4B]">
-                Our team reviews every application individually to ensure
-                high-quality events on the platform. We'll notify you once
-                your application has been approved or declined.
+            <div className="crew-note">
+              <span className="crew-note-pin" />
+              <p className="crew-note-label">Note 02</p>
+              <h3 className="crew-note-title">Review Process</h3>
+              <p className="crew-note-body">
+                Our team reviews every application individually to keep event
+                quality high. You&rsquo;ll hear back once your application has
+                been approved or declined.
               </p>
-
             </div>
-
           </div>
-
         </div>
-
       </div>
     </div>
   );
