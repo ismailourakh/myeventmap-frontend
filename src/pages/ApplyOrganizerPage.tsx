@@ -77,10 +77,10 @@ export function ApplyOrganizerPage() {
               <p className="crew-note-label">Note 01</p>
               <h3 className="crew-note-title">Why Join the Crew?</h3>
               <ul className="crew-note-list">
-                <li>🎟 Create and manage your own events.</li>
-                <li>📈 Reach more attendees.</li>
-                <li>🤝 Build your community.</li>
-                <li>🌍 Promote experiences across your city.</li>
+                <li> Create and manage your own events.</li>
+                <li> Reach more attendees.</li>
+                <li> Build your community.</li>
+                <li> Promote experiences across your city.</li>
               </ul>
             </div>
 
