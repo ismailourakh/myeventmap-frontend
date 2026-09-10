@@ -133,8 +133,8 @@ function TicketCard({ event, isLoggedIn, isBooking, onBook }: TicketCardProps) {
         <p className="ticket-desc">{event.description || "No description available."}</p>
 
         <div className="ticket-meta">
-          <span className="ticket-chip">📍 {event.location || "Unknown"}</span>
-          <span className="ticket-chip">📮 {event.postcode || "—"}</span>
+          <span className="ticket-chip"> {event.location || "Unknown"}</span>
+          <span className="ticket-chip"> {event.postcode || "—"}</span>
           <span className="ticket-chip">{event.includesFood ? "🍽 Food included" : "☕ No food"}</span>
         </div>
 
@@ -157,7 +157,7 @@ function TicketCard({ event, isLoggedIn, isBooking, onBook }: TicketCardProps) {
             rel="noreferrer"
             className="ticket-map-link"
           >
-            📍 Open map →
+             Open map →
           </a>
         )}
 

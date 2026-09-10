@@ -62,15 +62,15 @@ export function MyBookingsPage() {
                 <div className="wallet-body">
                   <div className="wallet-info-grid">
                     <div>
-                      <p className="wallet-info-label">📍 Location</p>
+                      <p className="wallet-info-label"> Location</p>
                       <p className="wallet-info-value">{booking.event?.location || "—"}</p>
                     </div>
                     <div>
-                      <p className="wallet-info-label">📮 Postcode</p>
+                      <p className="wallet-info-label"> Postcode</p>
                       <p className="wallet-info-value">{booking.event?.postcode || "—"}</p>
                     </div>
                     <div>
-                      <p className="wallet-info-label">📅 Event Date</p>
+                      <p className="wallet-info-label"> Event Date</p>
                       <p className="wallet-info-value">
                         {booking.event?.startDate
                           ? new Date(booking.event.startDate).toLocaleString()
@@ -78,7 +78,7 @@ export function MyBookingsPage() {
                       </p>
                     </div>
                     <div>
-                      <p className="wallet-info-label">🎟 Booked On</p>
+                      <p className="wallet-info-label"> Booked On</p>
                       <p className="wallet-info-value">
                         {new Date(booking.createdAt).toLocaleString()}
                       </p>
@@ -92,7 +92,7 @@ export function MyBookingsPage() {
                       rel="noreferrer"
                       className="wallet-map-link"
                     >
-                      📍 Open event location →
+                       Open event location →
                     </a>
                   )}
                 </div>

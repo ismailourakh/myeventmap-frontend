@@ -51,15 +51,12 @@ export function RegisterPage() {
 
         <div className="auth-checklist">
           <div className="auth-checklist-item">
-            <span className="auth-checklist-icon">🎟</span>
             <span className="auth-checklist-text">Reserve tickets in seconds</span>
           </div>
           <div className="auth-checklist-item">
-            <span className="auth-checklist-icon">📍</span>
             <span className="auth-checklist-text">Discover nearby premium events</span>
           </div>
           <div className="auth-checklist-item">
-            <span className="auth-checklist-icon">⭐</span>
             <span className="auth-checklist-text">Become an event organizer anytime</span>
           </div>
         </div>

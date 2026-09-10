@@ -78,7 +78,6 @@ export function MyEventsPage() {
 
         {events.length === 0 ? (
           <div className="empty-block">
-            <div className="empty-block-icon">📅</div>
             <h2 className="empty-block-title">No Events Yet</h2>
             <p className="empty-block-sub">Create your first event to start welcoming attendees.</p>
           </div>
@@ -101,27 +100,27 @@ export function MyEventsPage() {
                   <div className="show-card-body">
                     <div className="spec-grid">
                       <div className="spec-item">
-                        <p className="spec-label">📍 Location</p>
+                        <p className="spec-label"> Location</p>
                         <p className="spec-value">{event.location || "—"}</p>
                       </div>
                       <div className="spec-item">
-                        <p className="spec-label">📮 Postcode</p>
+                        <p className="spec-label"> Postcode</p>
                         <p className="spec-value">{event.postcode || "—"}</p>
                       </div>
                       <div className="spec-item">
-                        <p className="spec-label">📅 Start</p>
+                        <p className="spec-label"> Start</p>
                         <p className="spec-value">{new Date(event.startDate).toLocaleString()}</p>
                       </div>
                       <div className="spec-item">
-                        <p className="spec-label">👥 Capacity</p>
+                        <p className="spec-label"> Capacity</p>
                         <p className="spec-value">{event.capacity}</p>
                       </div>
                       <div className="spec-item">
-                        <p className="spec-label">🎟 Bookings</p>
+                        <p className="spec-label"> Bookings</p>
                         <p className="spec-value">{event.bookingsCount ?? 0}</p>
                       </div>
                       <div className="spec-item">
-                        <p className="spec-label">💺 Seats Left</p>
+                        <p className="spec-label"> Seats Left</p>
                         <p className="spec-value">{seats}</p>
                       </div>
                     </div>
@@ -133,7 +132,7 @@ export function MyEventsPage() {
                         rel="noreferrer"
                         className="show-map-link"
                       >
-                        📍 Open map →
+                         Open map →
                       </a>
                     )}
 
