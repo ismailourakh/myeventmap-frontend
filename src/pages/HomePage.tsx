@@ -98,8 +98,7 @@ function MarqueeHero() {
 function EmptyHouse() {
   return (
     <div className="empty-house">
-      <div className="empty-house-icon">🎫</div>
-      <h2 className="empty-house-title">The House Is Dark</h2>
+      <h2 className="empty-house-title">No Events</h2>
       <p className="empty-house-sub">Nothing on the board tonight — check back soon.</p>
     </div>
   );

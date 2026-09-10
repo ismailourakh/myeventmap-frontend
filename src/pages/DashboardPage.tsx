@@ -4,27 +4,24 @@ import "../styles/callsheet.css";
 
 interface QuickAction {
   id: string;
-  icon: string;
   title: string;
   description: string;
   link: string;
   goLabel: string;
-  roles: Array<"USER" | "ORGANIZER" | "ADMIN">;
+  roles: Array<"PARTICIPANT" | "ORGANIZER" | "ADMIN">;
 }
 
 const QUICK_ACTIONS: QuickAction[] = [
   {
     id: "become-organizer",
-    icon: "🚀",
     title: "Become an Organizer",
     description: "Apply to create and manage your own events.",
     link: "/apply-organizer",
     goLabel: "Start application",
-    roles: ["USER"],
+    roles: ["PARTICIPANT"],
   },
   {
     id: "my-events",
-    icon: "📅",
     title: "My Events",
     description: "View, edit, and manage all your events.",
     link: "/events/mine",
@@ -33,7 +30,6 @@ const QUICK_ACTIONS: QuickAction[] = [
   },
   {
     id: "admin-applications",
-    icon: "🛡️",
     title: "Organizer Applications",
     description: "Review and approve organizer requests.",
     link: "/admin/applications",
@@ -44,7 +40,7 @@ const QUICK_ACTIONS: QuickAction[] = [
 
 export function DashboardPage() {
   const user = useAuthStore((s) => s.user);
-  const role = (user?.role ?? "USER") as "USER" | "ORGANIZER" | "ADMIN";
+  const role = (user?.role ?? "PARTICIPANT") as "PARTICIPANT" | "ORGANIZER" | "ADMIN";
 
   const actions = QUICK_ACTIONS.filter((action) => action.roles.includes(role));
 
@@ -111,7 +107,6 @@ function CueCard({ action, index }: { action: QuickAction; index: number }) {
         </span>
       </div>
 
-      <div className="cue-card-icon">{action.icon}</div>
       <h3 className="cue-card-title">{action.title}</h3>
       <p className="cue-card-desc">{action.description}</p>
 

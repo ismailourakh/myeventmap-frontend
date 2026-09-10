@@ -78,7 +78,6 @@ export function AdminApplicationsPage() {
 
         <div className="readout-grid">
           <div className="readout-tile">
-            <div className="readout-icon">📋</div>
             <div className="readout-value">{applications.length}</div>
             <div className="readout-label">Pending Applications</div>
           </div>
@@ -88,7 +87,6 @@ export function AdminApplicationsPage() {
 
         {applications.length === 0 ? (
           <div className="empty-block">
-            <div className="empty-block-icon">🎉</div>
             <h2 className="empty-block-title">Everything Is Up to Date</h2>
             <p className="empty-block-sub">There are no pending organizer applications.</p>
           </div>

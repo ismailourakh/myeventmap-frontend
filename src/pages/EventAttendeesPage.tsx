@@ -4,6 +4,8 @@ import { api } from "../api/client";
 import type { Event, EventAttendee } from "../types";
 import { getErrorMessage } from "../lib/httpError";
 import "../styles/manage.css";
+import { Link } from "react-router-dom";
+
 
 export function EventAttendeesPage() {
   const { id } = useParams();
@@ -47,6 +49,12 @@ export function EventAttendeesPage() {
   return (
     <div className="ops-page">
       <div className="ops-container">
+        <Link
+          to={`/events/mine`}
+          className="show-action show-action--attendees"
+        >
+          Back
+        </Link>
         <p className="ops-eyebrow">Guest List</p>
         <h1 className="ops-title">Event Attendees</h1>
         <p className="ops-sub">{event?.title ?? "Your Event"}</p>
@@ -55,19 +63,16 @@ export function EventAttendeesPage() {
 
         <div className="readout-grid">
           <div className="readout-tile">
-            <div className="readout-icon">👥</div>
             <div className="readout-value">{attendees.length}</div>
             <div className="readout-label">Registered Attendees</div>
           </div>
 
           <div className="readout-tile">
-            <div className="readout-icon">🎟</div>
             <div className="readout-value">{event?.capacity ?? "—"}</div>
             <div className="readout-label">Capacity</div>
           </div>
 
           <div className="readout-tile">
-            <div className="readout-icon">💺</div>
             <div className="readout-value">
               {event?.seatsLeft ?? event?.availableSeats ?? "—"}
             </div>
@@ -77,7 +82,6 @@ export function EventAttendeesPage() {
 
         {attendees.length === 0 ? (
           <div className="empty-block">
-            <div className="empty-block-icon">🎫</div>
             <h2 className="empty-block-title">No Attendees Yet</h2>
             <p className="empty-block-sub">Once people book your event they&rsquo;ll appear here.</p>
           </div>
