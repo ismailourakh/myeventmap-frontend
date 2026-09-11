@@ -67,7 +67,6 @@ export function LoginPage() {
       <div className="auth-form-side">
         <div className="auth-card">
           <div className="auth-card-header">
-            <div className="auth-card-mark">🎟</div>
             <p className="auth-card-eyebrow">Admission</p>
             <h2 className="auth-card-title">Sign In</h2>
             <p className="auth-card-sub">Welcome back. Let&rsquo;s get you seated.</p>
