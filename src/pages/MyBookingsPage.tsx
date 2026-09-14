@@ -22,6 +22,19 @@ export function MyBookingsPage() {
     })();
   }, []);
 
+  const handlePrint = (bookingId: string) => {
+  document.querySelectorAll("[data-ticket-id]").forEach((el) => {
+    el.classList.toggle("print-target", el.getAttribute("data-ticket-id") === bookingId);
+  });
+  window.print();
+};
+
+  useEffect(() => {
+    const clear = () => document.body.removeAttribute("data-printing-ticket");
+    window.addEventListener("afterprint", clear);
+    return () => window.removeEventListener("afterprint", clear);
+  }, []);
+
   if (loading) {
     return (
       <div className="standby-screen">
@@ -103,6 +116,13 @@ export function MyBookingsPage() {
                     {booking.id.slice(0, 8).toUpperCase()}
                   </code>
                 </div>
+                 <div className="wallet-footer">
+                    <span className="wallet-footer-label">Booking ID</span>
+                    <code className="wallet-footer-code">{booking.id.slice(0, 8).toUpperCase()}</code>
+                    <button type="button" className="wallet-print-btn" onClick={() => handlePrint(booking.id)}>
+                      Save as PDF
+                    </button>
+                  </div>
               </article>
             ))}
           </div>

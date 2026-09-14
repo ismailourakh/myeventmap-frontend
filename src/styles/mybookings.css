@@ -329,3 +329,84 @@
   .wallet-tear::after { display: none; }
   .wallet-stamp { right: -1rem; }
 }
+
+/* ============================================
+   PRINT / SAVE AS PDF
+   ============================================ */
+
+.wallet-footer {
+  gap: 0.75rem;
+}
+
+.wallet-print-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  background: var(--ink-800);
+  border: 1px solid var(--line);
+  border-radius: 0.3rem;
+  padding: 0.4rem 0.7rem;
+  cursor: pointer;
+  transition: color 200ms var(--ease), border-color 200ms var(--ease);
+}
+
+.wallet-print-btn:hover {
+  color: var(--signal);
+  border-color: var(--signal-dim);
+}
+
+@media print {
+  body { background: var(--paper) !important; }
+
+  .ops-page {
+    background: #fff !important;
+    min-height: 0;
+  }
+
+  .ops-eyebrow,
+  .empty-block,
+  .wallet-print-btn {
+    display: none !important;
+  }
+
+  .wallet-grid {
+    display: block !important;
+    margin-top: 0;
+  }
+
+  .wallet-ticket {
+    display: none;
+  }
+
+  .wallet-ticket.print-target {
+    display: block !important;
+    break-inside: avoid;
+    border: 1px solid #000 !important;
+    background: #fff !important;
+  }
+
+  .wallet-banner {
+    background: #eee !important;
+  }
+
+  .wallet-banner-title,
+  .wallet-info-value,
+  .wallet-footer-code {
+    color: #000 !important;
+  }
+
+  .wallet-stamp {
+    border-color: #000 !important;
+    color: #000 !important;
+  }
+
+  .wallet-footer {
+    background: #fff !important;
+  }
+}
