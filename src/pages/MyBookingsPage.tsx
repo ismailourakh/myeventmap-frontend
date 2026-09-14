@@ -63,7 +63,7 @@ export function MyBookingsPage() {
         ) : (
           <div className="wallet-grid">
             {bookings.map((booking) => (
-              <article key={booking.id} className="wallet-ticket">
+              <article key={booking.id} className="wallet-ticket" data-ticket-id={booking.id}>
                 <div className="wallet-banner">
                   <span className="wallet-stamp">Admit One</span>
                   <p className="wallet-banner-eyebrow">Event Ticket</p>
