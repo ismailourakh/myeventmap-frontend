@@ -85,7 +85,7 @@ function MarqueeHero() {
           <span key={i} className="marquee-bulb" style={{ ["--bulb-i" as string]: i }} />
         ))}
       </div>
-      <p className="marquee-eyebrow">Now Booking</p>
+      <p className="marquee-eyebrow">Book now</p>
       <h1 className="marquee-title">On the Marquee</h1>
       <p className="marquee-sub">
         Premium events, elegant venues, and memories worth the price of admission.
